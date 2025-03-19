@@ -1,0 +1,19 @@
+{% if not isHtmxRequest %}
+<form class="sf-form"
+      method="{{form.getMethod()}}"
+      action="{{form.getAction() ?: request.url()}}"
+      hx-{{form.getMethod() | lower}}="{{form.getAction() ?: request.url()}}"
+>
+    {% endif %}
+
+    <input type="hidden" name="_token" value="{{csrf_token()}}" />
+    <input type="hidden" name="_sf_form" value="{{form.getName()}}" />
+    {% for field in form.getFields() %}
+        {{ field.tryRender() }}
+    {% endfor %}
+
+    {{ component('form.submit') }}
+
+    {% if not isHtmxRequest %}
+</form>
+{% endif %}

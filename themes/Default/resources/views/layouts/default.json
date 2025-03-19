@@ -1,0 +1,28 @@
+{
+    "version": "0.0.1",
+    "layout": [
+        {
+            "component": "grid.container",
+            "params": {
+                "mode": "fixed",
+                "width": "720"
+            },
+            "children": [
+                {
+                    "component": "grid.row",
+                    "children": [
+                        {
+                            "component": "grid.block",
+                            "params": {
+                                "id": "aside"
+                            }
+                        },
+                        {
+                            "component": "grid.content"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,9 @@
+{% for asset in assets %}
+    {% if asset.inline %}
+        <script>
+            {{ asset.source }}
+        </script>
+    {% else %}
+        <script src="{{ asset.source }}"></script>
+    {% endif %}
+{% endfor %}

@@ -1,0 +1,60 @@
+<div class="sf-table__container">
+    <input type="hidden" checked name="{{ table.REQUEST_KEYS.sort_by }}" value="{{ table.getSortBy() }}"/>
+    <input type="hidden" checked name="{{ table.REQUEST_KEYS.sort_order }}" value="{{ table.getSortOrder() }}"/>
+
+    <table class="sf-table">
+        <thead>
+        <tr>
+            {% for column in table.getColumns() %}
+                <td>
+                    <label>
+                        {% if column.getSortable() %}
+                            {% if table.getSortBy() != column.getName() %}
+                                <input
+                                    type="radio"
+                                    hx-trigger="change"
+                                    name="{{ table.REQUEST_KEYS.sort_by }}"
+                                    value="{{ column.getName() }}"
+                                />
+                            {% endif %}
+
+                            {% if table.getSortBy() == column.getName() %}
+                                <input
+                                    type="radio"
+                                    hx-trigger="change"
+                                    name="{{ table.REQUEST_KEYS.sort_order }}"
+                                    value="{{ table.getSortOrder() == 'asc' ? 'desc' : 'asc' }}"
+                                />
+                            {% endif %}
+                        {% endif %}
+                        {{ column.getLabel() }}
+                    </label>
+
+                </td>
+            {% endfor %}
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in table.getItems() %}
+            <tr>
+                {% for column in table.getColumns() %}
+                    <td>
+                        {% if column.getFormatter() %}
+                            {{ column.render(item) | raw }}
+                        {% else %}
+                            {{ column.render(item) }}
+                        {% endif %}
+                    </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="sf-table__pagination">
+        {{ table.getItems().links('sitefrog::partials.pagination') }}
+    </div>
+
+
+</div>
+
+

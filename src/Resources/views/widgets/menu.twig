@@ -1,0 +1,14 @@
+<ul class="sf-menu" data-level="{{ level }}" {% if id is not null %} data-id="{{ id }}" {% endif %}>
+    {% for item in items %}
+    <li class="sf-menu__item">
+        <a {% if item.getUrl() is not null %} href="{{ item.getUrl() }}" {% endif %} class="sf-menu__item__main">
+            {{ item.getTitle() }}
+        </a>
+        {% if item.hasChildren() %}
+        <div class="sf-menu__submenu">
+            {% include 'sitefrog::widgets.menu' with {items: item.getChildren(), level: level + 1} %}
+        </div>
+        {% endif %}
+    </li>
+    {% endfor %}
+</ul>

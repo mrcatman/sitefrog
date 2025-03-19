@@ -1,0 +1,40 @@
+{% if paginator.hasPages() %}
+
+    <ul class="sf-pagination">
+        {% if paginator.onFirstPage() %}
+            <li class="sf-pagination__item sf-pagination__item--disabled" aria-disabled="true">
+                <span class="sf-pagination__link">prev</span>
+            </li>
+        {% else %}
+            <li class="sf-pagination__item">
+                <a class="sf-pagination__link" href="{{ paginator.previousPageUrl() }}" rel="prev">prev</a>
+            </li>
+        {% endif %}
+
+        {% for element in elements %}
+            {% if element is iterable %}
+                {% for page, url in element %}
+                    {% if (page == paginator.currentPage()) %}
+                        <li class="active" aria-current="page"><span>{{ page }}</span></li>
+                    {% else %}
+                        <li><a href="{{ url }}">{{ page }}</a></li>
+                    {% endif %}
+                {% endfor %}
+            {% else %}
+                <li class="sf-pagination__item--disabled" aria-disabled="true"><span>{{ element }}</span></li>
+            {% endif %}
+        {% endfor %}
+
+        {% if paginator.hasMorePages() %}
+            <li class="sf-pagination__item">
+                <a class="sf-pagination__link" href="{{ paginator.nextPageUrl() }}" rel="next">next</a>
+            </li>
+        {% else %}
+            <li class="sf-pagination__item sf-pagination__item--disabled" aria-disabled="true">
+                <span class="sf-pagination__link">@lang('pagination.next')</span>
+            </li>
+        {% endif %}
+
+    </ul>
+
+{% endif %}

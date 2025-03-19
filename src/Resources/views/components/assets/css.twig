@@ -1,0 +1,9 @@
+{% for asset in assets %}
+    {% if asset.inline %}
+        <style>
+            {{ asset.source }}
+        </style>
+    {% else %}
+        <link rel="stylesheet" href="{{ asset.source }}" />
+    {% endif %}
+{% endfor %}

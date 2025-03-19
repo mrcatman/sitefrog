@@ -1,0 +1,10 @@
+.sf-grid {
+    &__container {
+        margin: 0 auto;
+        max-width: 1200px;
+    }
+    &__row > &__children {
+        display: flex;
+        gap: 1em;
+    }
+}

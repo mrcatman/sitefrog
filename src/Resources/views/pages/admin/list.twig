@@ -1,0 +1,16 @@
+<form hx-get="{{ url_current() }}" hx-trigger="change" hx-replace-url="true">
+    {% embed 'sitefrog::partials.box' %}
+        {% block main %}
+             {{ component('form.input', { name: 'search', value: input_get('search'), placeholder: 'Search...' }) }}
+        {% endblock %}
+    {% endembed %}
+
+    {% embed 'sitefrog::partials.box' %}
+        {% block main %}
+            {{ component('table', { table }) }}
+        {% endblock %}
+    {% endembed %}
+
+</form>
+
+
