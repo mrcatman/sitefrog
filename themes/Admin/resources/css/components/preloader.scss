@@ -1,0 +1,18 @@
+.preloader {
+    margin: 16px auto;
+    width: 36px;
+    height: 36px;
+    border: 5px solid #1fa530;
+    border-radius: 50%;
+    border-top-color: transparent;
+    animation: preloader 1s infinite;
+}
+
+@keyframes preloader {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}

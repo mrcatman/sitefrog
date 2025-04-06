@@ -1,15 +1,20 @@
-<form hx-get="{{ url_current() }}" hx-trigger="change" hx-replace-url="true">
-    {% embed 'sitefrog::partials.box' %}
-        {% block main %}
-             {{ component('form.input', { name: 'search', value: input_get('search'), placeholder: 'Search...' }) }}
-        {% endblock %}
-    {% endembed %}
 
-    {% embed 'sitefrog::partials.box' %}
+<form hx-get="{{ url_current() }}" hx-trigger="change" hx-replace-url="true">
+    {% component 'box' %}
+        {% block title %}
+            blocktitle
+        {% endblock %}
+        {% block main %}
+            {{ component('form.input', { name: 'search', value: input_get('search'), placeholder: 'Search...' }) }}
+        {% endblock %}
+    {% endcomponent %}
+
+
+    {% component 'box'  with { title: 'testtitle' } %}
         {% block main %}
             {{ component('table', { table }) }}
         {% endblock %}
-    {% endembed %}
+    {% endcomponent %}
 
 </form>
 

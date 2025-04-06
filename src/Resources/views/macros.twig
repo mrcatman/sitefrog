@@ -1,0 +1,1 @@
+{% macro _block(instance, name = 'default') %}{% set children = name == 'default' ? instance.children : instance.children[name] %}{% if children != null %}{{ component('grid', {layout: children}) }}{% else %}{% block name %}{% endblock %}{% endif %}{% endmacro %}

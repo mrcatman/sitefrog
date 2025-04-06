@@ -6,9 +6,16 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\Route;
 use Sitefrog\Facades\ComponentManager;
 use Sitefrog\Facades\FormManager;
+use Sitefrog\Facades\Page;
+use Sitefrog\View\Components\Admin\FiltersWrapper;
+use Sitefrog\View\Components\Box;
+use Sitefrog\View\Components\Button;
+use Sitefrog\View\Form\Fields\Input;
 use Sitefrog\View\Form\Form;
+use Sitefrog\View\HTMX;
 use Sitefrog\View\Table\Column;
 use Sitefrog\View\Table\Table;
+use Sitefrog\View\Components\Form\Form as FormComponent;
 
 class AdminResourceController extends BaseController
 {
@@ -18,27 +25,39 @@ class AdminResourceController extends BaseController
     protected $sortable = ['id'];
     protected $searchable = [];
 
-    protected $translations = [
-        'list' => [
-            'heading' => 'List',
-        ],
-        'form' => [
-            'create' => [
-                'heading' => 'Create object',
-                'button' => 'Add object'
-            ],
-            'edit' => [
-                'heading' => 'Edit object',
-                'button' => 'Save object'
-            ],
-        ]
-    ];
+    protected $translations = [];
 
-    protected function buildForm($item = null): Form {
+    public function __construct()
+    {
+        $this->translations = [
+            'list' => [
+                'title' => __('sitefrog::common.list'),
+            ],
+            'form' => [
+                'create' => [
+                    'title' => __('sitefrog::common.create'),
+                    'button' => __('sitefrog::common.add'),
+                ],
+                'edit' => [
+                    'title' => __('sitefrog::common.edit'),
+                    'button' => __('sitefrog::common.save'),
+                ],
+                'delete' => [
+                    'title' => __('sitefrog::common.delete'),
+                    'confirm' => __('sitefrog::common.delete_are_you_sure'),
+                    'button' => __('sitefrog::common.delete_confirm'),
+                ],
+            ]
+        ];
+    }
+
+    protected function buildForm($item = null): Form
+    {
         throw new \Exception("You need to implement a form");
     }
 
-    protected function buildTable(Builder $query): Table {
+    protected function buildTable(Builder $query): Table
+    {
         throw new \Exception("You need to implement a table");
     }
 
@@ -52,27 +71,71 @@ class AdminResourceController extends BaseController
         return route(implode('.', $nameParts), $params);
     }
 
+    protected function getLabel($item)
+    {
+        return $item->id;
+    }
+
     protected function getTableActions($item)
     {
         return [
             [
-                'label' => __('sitefrog.admin.edit'),
-                'url' => $this->getUrl('edit', $item)
+                'content' => __('sitefrog::common.edit'),
+                'attrs' => [
+                    'href' => $this->getUrl('edit', $item),
+                ],
+            ],
+            [
+                'content' => __('sitefrog::common.delete'),
+                'attrs' => [
+                    'href' => $this->getUrl('delete', $item),
+                    'modal' => true
+                ],
             ]
         ];
     }
 
-    protected function getForm($item = null)
+    protected function getEditForm($item = null)
     {
         $form = $this->buildForm($item);
         if ($item) {
             $form->setValues($item);
         }
 
-        $form->setName($this->resource.'-edit')
+        $form->setName($this->resource . '-edit')
             ->setMethod($item ? 'PUT' : 'POST');
 
+        $form->setAction($item ? $this->getUrl('edit', $item) : $this->getUrl('create'));
+        $form->setSubmitLabel($this->translations['form'][$item ? 'edit' : 'create']['button']);
+
         $form->onSubmit(fn() => $this->submit($form, $item));
+        FormManager::register($form);
+
+        return $form;
+    }
+
+    protected function getDeleteForm($item = null)
+    {
+        $form = new Form(
+            fields: [
+                new Input(
+                    name: 'id',
+                    type: 'hidden',
+                    value: $item->id,
+                ),
+            ]
+        );
+        $form->setName($this->resource . '-delete')->setMethod('DELETE');
+        if ($item) {
+            $form->setValues($item);
+        }
+
+        $form->setName($this->resource . '-delete')->setMethod('DELETE');
+
+        $form->setAction($this->getUrl('delete', $item));
+        $form->setSubmitLabel($this->translations['form']['delete']['button']);
+
+        $form->onSubmit(fn() => $this->submitDelete($form, $item));
         FormManager::register($form);
 
         return $form;
@@ -87,9 +150,9 @@ class AdminResourceController extends BaseController
                 label: '',
                 formatter: function ($item) {
                     return ComponentManager::makeInstance('dropdown', [
-                        'label' => __('sitefrog.common.actions'),
+                        'title' => __('sitefrog::common.actions'),
                         'items' => $this->getTableActions($item)
-                    ]);
+                    ])->render();
                 }
             ),
         );
@@ -99,9 +162,9 @@ class AdminResourceController extends BaseController
     protected function search(Builder $query)
     {
         if (request()->has('search')) {
-            $query->where(function($q) {
+            $query->where(function ($q) {
                 foreach ($this->searchable as $field) {
-                    $q->orWhere($field, 'LIKE', '%'.request()->input('search').'%');
+                    $q->orWhere($field, 'LIKE', '%' . request()->input('search') . '%');
                 }
             });
         }
@@ -109,23 +172,53 @@ class AdminResourceController extends BaseController
 
     public function index()
     {
+        Page::setTitle($this->translations['list']['title']);
+
         $query = $this->resource::query();
         $this->search($query);
+
         $table = $this->getTable($query);
 
-        return $this->render('sitefrog::pages.admin.list', [
-            'table' => $table
+        return $this->renderGrid([
+            new Box(
+                heading: Page::getTitle(),
+                children: [
+                    'main' => [
+                        new FiltersWrapper(
+                            children: [
+                                new Input(
+                                    name: 'search',
+                                    value: request()->input('search'),
+                                    attrs: [
+                                        'placeholder' => __('sitefrog::common.search'),
+                                    ]
+                                ),
+                                new \Sitefrog\View\Components\Table\Table(
+                                    table: $table
+                                )
+                            ]
+                        )
+                    ]
+                ]
+            )
         ]);
 
     }
 
     public function create()
     {
-        $form = $this->getForm();
-
-        return $this->render('sitefrog::pages.admin.form', [
-            'form' => $form,
-            'item' => null
+        Page::setTitle($this->translations['form']['create']['title']);
+        return $this->renderGrid([
+            new Box(
+                heading: Page::getTitle(),
+                children: [
+                    'main' => [
+                        new FormComponent(
+                            $this->getEditForm()
+                        )
+                    ]
+                ]
+            )
         ]);
     }
 
@@ -135,17 +228,89 @@ class AdminResourceController extends BaseController
         if (!$item) {
             throw new \Exception("Not found"); // todo: Not found page
         }
-        $form = $this->getForm($item);
 
-        return $this->render('sitefrog::pages.admin.form', [
-            'form' => $form,
-            'item' => $item
+        Page::setTitle($this->translations['form']['edit']['title']);
+
+        $formComponent = new FormComponent(
+            $this->getEditForm($item)
+        );
+
+        if (HTMX::isModalRequest()) {
+            return $this->renderGrid([
+                $formComponent
+            ]);
+        }
+        return $this->renderGrid([
+            new Box(
+                heading: $this->translations['form']['edit']['title'],
+                children: [
+                    'main' => [
+                        $formComponent
+                    ],
+                    'actions' => [
+                        new Button(
+                            content: __('sitefrog::common.back'),
+                            attrs: [
+                                'href' => $this->getUrl('index')
+                            ]
+                        ),
+                    ]
+                ]
+            )
+        ]);
+    }
+
+    public function delete($id)
+    {
+        $item = $this->resource::find($id);
+        if (!$item) {
+            throw new \Exception("Not found");
+        }
+
+        Page::setTitle($this->translations['form']['delete']['title']);
+
+        $formComponent = new FormComponent(
+            $this->getDeleteForm($item)
+        );
+
+        $content = [
+            __($this->translations['form']['delete']['confirm'], ['label' => $this->getLabel($item)]),
+            $formComponent,
+        ];
+
+        if (HTMX::isModalRequest()) {
+            return $this->renderGrid($content);
+        }
+
+        return $this->renderGrid([
+            new Box(
+                heading: $this->translations['form']['delete']['title'],
+                children: [
+                    'main' => $content,
+                    'actions' => [
+                        new Button(
+                            content: __('sitefrog::common.back'),
+                            attrs: [
+                                'href' => $this->getUrl('index')
+                            ]
+                        ),
+                    ]
+                ]
+            )
         ]);
     }
 
     public function submit(Form $form, $item)
     {
+
         echo 'test';
     }
+
+    public function submitDelete(Form $form, $item)
+    {
+        $this->closeModal();
+        echo 'test';
+    }
+
 
 }

@@ -107,6 +107,8 @@ return [
         |
         */
         'enabled' => [
+            'Twig\Extra\Html\HtmlExtension',
+
             'TwigBridge\Extension\Laravel\Event',
             'TwigBridge\Extension\Loader\Facades',
             'TwigBridge\Extension\Loader\Filters',
@@ -123,7 +125,9 @@ return [
             'TwigBridge\Extension\Laravel\Url',
             'TwigBridge\Extension\Laravel\Model',
 
-            \Sitefrog\View\TwigExtensions\Components::class
+            'Sitefrog\View\TwigExtensions\HTMLAttributes',
+            'Sitefrog\View\TwigExtensions\Components',
+            'Sitefrog\View\TwigExtensions\Globals'
         ],
 
         /*

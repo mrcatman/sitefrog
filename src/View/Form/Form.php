@@ -19,6 +19,8 @@ class Form
 
     private Collection $fields;
 
+    private ?string $submitLabel = null;
+
     public function __construct(
         private ?string $name = null,
         array | Collection $fields = [],

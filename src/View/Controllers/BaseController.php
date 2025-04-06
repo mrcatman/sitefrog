@@ -8,22 +8,14 @@ use Illuminate\Support\Str;
 use Sitefrog\Facades\AssetManager;
 use Sitefrog\Facades\FormManager;
 use Sitefrog\Facades\LayoutManager;
+use Sitefrog\Facades\Page;
 use Sitefrog\Facades\PageData;
 use Sitefrog\Facades\RedirectManager;
 use Sitefrog\View\Components;
+use Sitefrog\View\HTMX;
 
 class BaseController extends Controller
 {
-
-    protected function isHtmxRequest()
-    {
-        return request()->header('hx-request') === 'true';
-    }
-
-    protected function isHtmxFormRequest()
-    {
-        return $this->isHtmxRequest() && request()->has('_sf_form');
-    }
 
     protected function handleHtmxFormRequest()
     {
@@ -38,13 +30,12 @@ class BaseController extends Controller
 
         return (new Components\Form\Form(
             form: $form,
-            isHtmxRequest: true
         ))->tryRender();
     }
 
     protected function render(string $view, array $view_params = [])
     {
-        if ($this->isHtmxFormRequest()) {
+        if (HTMX::isFormRequest()) {
             return $this->handleHtmxFormRequest();
         }
 
@@ -55,12 +46,17 @@ class BaseController extends Controller
         $params = [];
         $layout_view = LayoutManager::getForRequest(request());
 
-        if ($this->isHtmxRequest()) {
+        PageData::setView($view);
+        PageData::setParams($view_params);
+
+        if (HTMX::isHtmxRequest() && !HTMX::isModalRequest()) {
             return view($view, $view_params);
         }
 
-        PageData::setView($view);
-        PageData::setParams($view_params);
+        if (HTMX::isModalRequest()) {
+            $layout_view = 'sitefrog::layouts.modal-content';
+            $params['__sf_modal_id'] = request()->input('_sf_modal_id');
+        }
 
         if (Str::endsWith($layout_view, '.json')) {
             AssetManager::addCss(Storage::disk('sitefrog')->path('resources/css/grid/index.scss'));
@@ -70,6 +66,22 @@ class BaseController extends Controller
         }
 
         return view($layout_view, $params);
+    }
+
+    protected function renderGrid($layout) {
+        return $this->render('sitefrog::grid', [
+            'layout' => $layout
+        ]);
+    }
+
+    protected function htmxTrigger()
+    {
+
+    }
+
+    protected function closeModal()
+    {
+
     }
 
 }

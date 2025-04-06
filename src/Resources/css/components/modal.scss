@@ -1,0 +1,13 @@
+.modal {
+    position: absolute;
+
+    &__main {
+        position: relative;
+    }
+
+    &__content {
+        transition: width, height .4s;
+        display: inline-block;
+        min-width: 400px;
+    }
+}

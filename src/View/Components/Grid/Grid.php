@@ -4,7 +4,6 @@ namespace Sitefrog\View\Components\Grid;
 
 use Illuminate\Support\Collection;
 use Sitefrog\View\Component;
-use Illuminate\View\View;
 use Sitefrog\Facades\ComponentManager;
 
 class Grid extends Component
@@ -12,9 +11,12 @@ class Grid extends Component
 
     public function __construct(
         private ?string $file = null,
-        private array | Collection $layout = []
+        public array | Collection | null $layout = null,
     )
     {
+        if ($layout) {
+            $this->layout = collect($layout);
+        }
     }
 
     private function configToComponent($config)
@@ -42,15 +44,17 @@ class Grid extends Component
         $this->layout = $layout;
     }
 
-    public function render(): View
+    public static function getTemplate(): string
+    {
+        return 'sitefrog::components.grid';
+    }
+
+    public function beforeRender(): void
     {
         if (!empty($this->file)) {
             $this->loadFromFile();
         } else if (empty($this->layout)) {
             throw new \Exception('Specify either layout or file for grid');
         }
-        return view('sitefrog::components.grid', [
-            'layout' => $this->layout
-        ]);
     }
 }

@@ -2,19 +2,17 @@
 
 namespace Sitefrog\View\Components;
 
-use Illuminate\View\View;
 use Sitefrog\View\Component;
 
 class Dropdown extends Component
 {
     public function __construct(
+        public string $title = '',
+        public array $items = []
+    ) {}
 
-    )
+    public static function getTemplate(): string
     {
-    }
-
-    public function render(): View | string
-    {
-        return 'test';
+        return 'sitefrog::components.dropdown';
     }
 }

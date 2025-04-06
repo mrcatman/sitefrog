@@ -3,23 +3,24 @@
 namespace Sitefrog\View\Components\Table;
 
 use Sitefrog\View\Component;
-use Illuminate\View\View;
 
 use Sitefrog\View\Table\Table as TableClass;
 
 class Table extends Component
 {
     public function __construct(
-        private TableClass $table,
+        public TableClass $table,
     ) {}
 
-    public function render(): View
+    public static function getTemplate(): string
     {
-        $this->table->fetchItems();
-        return view('sitefrog::components.table', [
-            'table' => $this->table,
-        ]);
+        return 'sitefrog::components.table';
     }
 
+    public function beforeRender(): void
+    {
+
+        $this->table->fetchItems();
+    }
 
 }

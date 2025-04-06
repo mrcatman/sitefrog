@@ -1,0 +1,20 @@
+{% from 'sitefrog::macros' import _block %}
+<div class="sf-box">
+    <div class="sf-box__top">
+        <div class="sf-box__heading">
+            {% set heading = _block(this, 'heading') %}
+            {% if heading %}
+                {{ heading }}
+            {% else %}
+                {{ this.heading }}
+            {% endif %}
+        </div>
+        <div class="sf-box__actions">
+            {{ _block(this, 'actions') }}
+        </div>
+    </div>
+
+    <div class="sf-box__main">
+        {{ _block(this, 'main') }}
+    </div>
+</div>

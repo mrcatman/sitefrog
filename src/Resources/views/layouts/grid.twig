@@ -1,10 +1,13 @@
 <html>
 <head>
-    {{ component('assets', { type: 'css' }) }}
+    {{ component('head') }}
 </head>
-<body >
+<body>
 {{ component('grid', { file: __sf_grid_file }) }}
+
 {{ component('assets', { type: 'js' }) }}
+
+{{ component('modals-container') }}
 </body>
 
 </html>

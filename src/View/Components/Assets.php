@@ -2,27 +2,31 @@
 
 namespace Sitefrog\View\Components;
 
-use Illuminate\View\View;
+use Illuminate\Support\Collection;
 use Sitefrog\Facades\AssetManager;
 use Sitefrog\View\Component;
 
 class Assets extends Component
 {
+    public Collection $assets;
+
     public function __construct(
-        private string $type = 'css',
-    )
-    {
+        public string $type = 'css',
+    ) {
     }
 
-    public function render(): View
+    public static function getTemplate(): string
     {
-        $assets = match ($this->type) {
+        return 'sitefrog::components.assets';
+    }
+
+    public function beforeRender(): void
+    {
+        $this->assets = match ($this->type) {
             'css' => AssetManager::getCss(),
             'js' => AssetManager::getJs(),
+            'hyperscript' => AssetManager::getHyperscript(),
             default => throw new \Exception("Unknown asset type: $this->type"),
         };
-        return view("sitefrog::components.assets.".$this->type, [
-            'assets' => $assets
-        ]);
     }
 }

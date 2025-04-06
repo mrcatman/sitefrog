@@ -1,0 +1,11 @@
+<div class="sf-button sf-dropdown">
+    <div class="sf-dropdown__title">{{ this.title }}</div>
+    <div class="sf-dropdown__actions">
+        {% for item in this.items %}
+        <a {{ html_attributes(
+                item.attrs,
+                {class: 'sf-dropdown__action'}
+         ) }}>{{ item.content }}</a>
+        {% endfor %}
+    </div>
+</div>

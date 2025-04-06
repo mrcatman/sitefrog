@@ -1,8 +1,13 @@
-<input
-    name="{{field.getName()}}"
-    type="{{field.getType()}}"
-    value="{{field.getValue()}}"
-    placeholder="{{ field.getPlaceholder() }}"
-    class="sf-form__input sf-form__input--{{field.getType()}}"
-/>
-
+{% set _field = this %}
+{% component 'form.field-wrapper' with { field: _field } %}
+    {% block main %}
+        <input
+            {{ html_attributes({
+                name: _field.getName(),
+                type: _field.getType(),
+                value: _field.getValue(),
+                class: [  'sf-form__input', 'sf-form__input--' ~ _field.getType()]
+            }, _field.getAttrs()) }}
+        />
+    {% endblock %}
+{% endcomponent %}

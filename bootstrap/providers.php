@@ -1,6 +1,6 @@
 <?php
 
 return [
-    App\Providers\AppServiceProvider::class,
-    Sitefrog\Providers\SitefrogServiceProvider::class
+    Sitefrog\Providers\MainServiceProvider::class,
+    Sitefrog\Providers\ComponentsServiceProvider::class
 ];

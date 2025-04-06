@@ -43,7 +43,7 @@ class BaseTheme
 
     public function load()
     {
-        View::prependNamespace('sitefrog', Storage::disk('themes')->path("$this->name/views"));
+        View::prependNamespace('sitefrog', Storage::disk('themes')->path("$this->name/resources/views"));
     }
 
 }

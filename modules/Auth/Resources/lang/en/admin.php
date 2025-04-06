@@ -1,5 +1,7 @@
 <?php
 return [
-    'users' => 'Users',
-    'list' => 'Manage users'
+    'users' => [
+        'title' => 'Users',
+        'list' => 'Users list',
+    ]
 ];

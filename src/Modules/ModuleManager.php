@@ -31,7 +31,6 @@ class ModuleManager {
     {
         $className = "Modules\\$name\\Module";
         $class = $this->app->make($className);
-        $class->load();
         return $class;
     }
 

@@ -1,0 +1,7 @@
+{% if this.type == 'css' %}
+    {% include 'sitefrog::components.assets.css' with { assets: this.assets } %}
+{% elseif this.type == 'js' %}
+    {% include 'sitefrog::components.assets.js' with { assets: this.assets } %}
+{% elseif this.type == 'hyperscript' %}
+    {% include 'sitefrog::components.assets.hyperscript' with { assets: this.assets } %}
+{% endif %}

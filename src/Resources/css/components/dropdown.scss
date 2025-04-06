@@ -1,0 +1,12 @@
+.sf-dropdown {
+    position: relative;
+    &__actions {
+        position: absolute;
+        top: calc(100% - 1px);
+        left: 0;
+        display: none;
+    }
+    &:hover &__actions, &__actions:hover {
+        display: block;
+    }
+}

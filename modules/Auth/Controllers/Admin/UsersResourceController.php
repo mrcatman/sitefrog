@@ -19,9 +19,8 @@ class UsersResourceController extends AdminResourceController {
     protected $searchable = ['username', 'email'];
 
     public function __construct() {
-        $this->translations = [
-
-        ];
+        parent::__construct();
+        $this->translations['list']['title'] = __('sitefrog.auth::admin.users.list');
     }
 
     protected function buildForm($item = null): Form
@@ -31,7 +30,7 @@ class UsersResourceController extends AdminResourceController {
                 new Input(
                     name: 'username',
                     label: __('sitefrog.auth::fields.username'),
-                    validationRules: ['required']
+                    validationRules: ['required', 'min:10']
                 ),
                 new Input(
                     name: 'email',
@@ -50,7 +49,7 @@ class UsersResourceController extends AdminResourceController {
             columns: [
                 new Column(
                     name: 'id',
-                    label: __('sitefrog.auth::fields.id'),
+                    label: __('sitefrog::fields.id'),
                     sortable: true,
                 ),
                 new Column(
@@ -65,7 +64,7 @@ class UsersResourceController extends AdminResourceController {
                 ),
                 new Column(
                     name: 'created_at',
-                    label: __('sitefrog.auth::fields.created_at'),
+                    label: __('sitefrog::fields.created_at'),
                     formatter: function(User $user) {
                         return $user->created_at->format('d.m.Y H:i:s');
                     }

@@ -1,0 +1,25 @@
+.sf-form {
+    margin: 0;
+    &__input {
+        background: linear-gradient(#ffffff9e, #fff);
+        border: 1px solid;
+        border-top-color: #eee;
+        border-bottom-color: #777;
+        border-left-color: #bbb;
+        border-right-color: #bbb;
+        outline: none;
+        font: inherit;
+        padding: 8px;
+        border-radius: 4px;
+    }
+
+    &__cancel {
+        margin-left: 16px;
+        font-size: 14px;
+        cursor: pointer;
+        border-bottom: 1px solid;
+    }
+    &__buttons {
+        border-top: 1px solid rgba(255, 255, 255, .2);
+    }
+}

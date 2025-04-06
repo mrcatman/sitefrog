@@ -1,3 +1,9 @@
-body {
-    background: #addc94;
-}
+@import 'base';
+
+@import 'components/box';
+@import 'components/button';
+@import 'components/dropdown';
+@import 'components/form';
+@import 'components/modal';
+@import 'components/preloader';
+@import 'components/table';

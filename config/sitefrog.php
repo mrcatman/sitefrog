@@ -41,6 +41,7 @@ return [
                 'theme' => 'Default',
 
                 'css' => [
+                    ['source' => 'resources/css/index.scss'],
                     ['source' => 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css']
                 ],
                 'js' => [
@@ -54,10 +55,17 @@ return [
                     \Sitefrog\Http\Middleware\CheckGroup::class.':'.\Sitefrog\Models\UserGroup::$ROLE_ID_ADMIN
                 ],
                 'css' => [
+                    ['source' => 'resources/css/index.scss'],
                    // ['source' => 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css']
                 ],
                 'js' => [
-                    ['source' => 'https://unpkg.com/htmx.org@2.0.4', 'params' => ['integrity' => 'sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+', 'crossorigin' => 'anonymous']]
+                  //  ['source' => 'https://unpkg.com/htmx.org@2.0.4', 'params' => ['integrity' => 'sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+', 'crossorigin' => 'anonymous']],
+                    ['source' => 'resources/js/htmx.js'],
+                //    ['source' => 'https://unpkg.com/hyperscript.org@0.9.14', 'params' => ['crossorigin' => 'anonymous']],
+                    ['source' => 'resources/js/features/modals.js'],
+                ],
+                'hyperscript' => [
+                 //   ['source' => 'resources/hyperscript/index.hs'],
                 ]
             ],
         ]

@@ -1,19 +1,29 @@
-{% if not isHtmxRequest %}
+{% if not is_form_request() %}
 <form class="sf-form"
-      method="{{form.getMethod()}}"
-      action="{{form.getAction() ?: request.url()}}"
-      hx-{{form.getMethod() | lower}}="{{form.getAction() ?: request.url()}}"
+      method="{{this.form.getMethod()}}"
+      action="{{this.form.getAction() ?: request.url()}}"
+      hx-{{this.form.getMethod() | lower}}="{{this.form.getAction() ?: request.url()}}"
+      hx-target="this"
 >
     {% endif %}
 
     <input type="hidden" name="_token" value="{{csrf_token()}}" />
-    <input type="hidden" name="_sf_form" value="{{form.getName()}}" />
-    {% for field in form.getFields() %}
-        {{ field.tryRender() }}
-    {% endfor %}
+    <input type="hidden" name="_sf_form" value="{{this.form.getName()}}" />
 
-    {{ component('form.submit') }}
+    <div class="sf-form__inputs">
+        {{ component('grid', { layout: this.form.getFields() }) }}
+    </div>
 
-    {% if not isHtmxRequest %}
+
+    <div class="sf-form__buttons">
+        {{ component('button', {content: this.form.getSubmitLabel() ?: trans('sitefrog::common.submit'), attrs: {type: 'submit'}}) }}
+        {% if is_modal_request() %}
+        <a class="sf-form__cancel" data-modal-close>{{ trans('sitefrog::common.cancel') }}</a>
+        {% endif %}
+    </div>
+
+
+
+    {% if not is_form_request() %}
 </form>
 {% endif %}

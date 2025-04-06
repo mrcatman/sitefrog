@@ -2,7 +2,6 @@
 
 namespace Sitefrog\View\Table;
 use Sitefrog\Traits\MagicGetSet;
-use Sitefrog\View\Component;
 
 class Column
 {
@@ -18,7 +17,7 @@ class Column
     }
 
 
-    public function render($item): string | null
+    public function render($item)
     {
         if ($this->formatter) {
             return call_user_func($this->formatter, $item, $this);

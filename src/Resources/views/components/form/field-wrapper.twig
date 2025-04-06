@@ -1,13 +1,14 @@
-<div class="sf-form__field-wrapper {% if field.hasErrors() %} sf-form__field-wrapper--with-errors {% endif %}">
-    {% if field.getLabel() is not null %}
-    <label class="sf-form__label">{{field.getLabel()}}</label>
+<div class="sf-form__field-wrapper {% if this.field.hasErrors() %} sf-form__field-wrapper--with-errors {% endif %}">
+    {% if this.field.getLabel() is not null %}
+    <label class="sf-form__label">{{this.field.getLabel()}}</label>
     {% endif %}
     <div class="sf-form__field">
-        {{ field.renderBase() }}
+        {% block main %}
+        {% endblock %}
     </div>
-    {% if field.hasErrors() %}
+    {% if this.field.hasErrors() %}
     <div class="sf-form__errors">
-        {% for error in field.getErrors() %}
+        {% for error in this.field.getErrors() %}
         <span class="sf-form__error">{{error}}</span>
        {% endfor  %}
     </div>

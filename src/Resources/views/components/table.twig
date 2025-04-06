@@ -1,43 +1,54 @@
 <div class="sf-table__container">
-    <input type="hidden" checked name="{{ table.REQUEST_KEYS.sort_by }}" value="{{ table.getSortBy() }}"/>
-    <input type="hidden" checked name="{{ table.REQUEST_KEYS.sort_order }}" value="{{ table.getSortOrder() }}"/>
+    <input type="hidden" checked name="{{ this.table.REQUEST_KEYS.sort_by }}" value="{{ this.table.getSortBy() }}"/>
+    <input type="hidden" checked name="{{ this.table.REQUEST_KEYS.sort_order }}" value="{{ this.table.getSortOrder() }}"/>
 
     <table class="sf-table">
         <thead>
         <tr>
-            {% for column in table.getColumns() %}
-                <td>
-                    <label>
-                        {% if column.getSortable() %}
-                            {% if table.getSortBy() != column.getName() %}
+            {% for column in this.table.getColumns() %}
+                <td class="{{ html_classes(
+                    {
+                        'sf-table__sortable': column.getSortable(),
+                        'sf-table__sortable--active': this.table.getSortBy() == column.getName(),
+                        ('sf-table__sortable--' ~ this.table.getSortOrder()): this.table.getSortBy() == column.getName(),
+                    }
+                ) }}">
+
+                    {% if column.getSortable() %}
+                        <label class="sf-table__sortable__label">
+                            {% if this.table.getSortBy() != column.getName() %}
                                 <input
+                                    style="display: none"
                                     type="radio"
                                     hx-trigger="change"
-                                    name="{{ table.REQUEST_KEYS.sort_by }}"
+                                    name="{{ this.table.REQUEST_KEYS.sort_by }}"
                                     value="{{ column.getName() }}"
                                 />
                             {% endif %}
 
-                            {% if table.getSortBy() == column.getName() %}
+                            {% if this.table.getSortBy() == column.getName() %}
                                 <input
+                                    style="display: none"
                                     type="radio"
                                     hx-trigger="change"
-                                    name="{{ table.REQUEST_KEYS.sort_order }}"
-                                    value="{{ table.getSortOrder() == 'asc' ? 'desc' : 'asc' }}"
+                                    name="{{ this.table.REQUEST_KEYS.sort_order }}"
+                                    value="{{ this.table.getSortOrder() == 'asc' ? 'desc' : 'asc' }}"
                                 />
                             {% endif %}
-                        {% endif %}
+                            {{ column.getLabel() }}
+                        </label>
+                    {% else %}
                         {{ column.getLabel() }}
-                    </label>
+                    {% endif %}
 
                 </td>
             {% endfor %}
         </tr>
         </thead>
         <tbody>
-        {% for item in table.getItems() %}
+        {% for item in this.table.getItems() %}
             <tr>
-                {% for column in table.getColumns() %}
+                {% for column in this.table.getColumns() %}
                     <td>
                         {% if column.getFormatter() %}
                             {{ column.render(item) | raw }}
@@ -51,10 +62,8 @@
         </tbody>
     </table>
     <div class="sf-table__pagination">
-        {{ table.getItems().links('sitefrog::partials.pagination') }}
+        {{ this.table.getItems().links('sitefrog::partials.pagination') }}
     </div>
-
-
 </div>
 
 

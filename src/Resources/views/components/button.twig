@@ -1,0 +1,5 @@
+{% set tag = this.attrs.href ? 'a' : 'button' %}
+<{{ tag }} {{ html_attributes(
+    this.attrs,
+    {class: ['button',  'button--' ~ this.variant]}
+) }}>{{ this.content }}</{{ tag }}>

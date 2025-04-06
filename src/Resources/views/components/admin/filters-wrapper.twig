@@ -1,0 +1,5 @@
+{% from 'sitefrog::macros' import _block %}
+<form hx-get="{{ url_current() }}" hx-trigger="change" hx-replace-url="true">
+    {{ _block(this, 'default') }}
+</form>
+

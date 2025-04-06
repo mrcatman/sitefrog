@@ -1,0 +1,9 @@
+{% for asset in assets %}
+    {% if asset.inline %}
+        <script type="text/hyperscript">
+            {{ asset.source }}
+        </script>
+    {% else %}
+        <script type="text/hyperscript" src="{{ asset.source }}"></script>
+    {% endif %}
+{% endfor %}

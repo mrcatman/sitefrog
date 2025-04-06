@@ -12,7 +12,7 @@ class Input extends Field
         protected string $name,
         protected string $type = 'text',
         protected ?string $value = null,
-        protected ?string $placeholder = null,
+        protected ?array $attrs = [],
         protected ?string $label = null,
         protected ?array $validationRules = []
     )
@@ -21,8 +21,13 @@ class Input extends Field
             name: $name,
             value: $value,
             label: $label,
-            validationRules: $this->validationRules
+            attrs: $attrs,
+            validationRules: $validationRules
         );
+    }
+    public static function getTemplate(): string
+    {
+        return 'sitefrog::components.form.input';
     }
 
 }

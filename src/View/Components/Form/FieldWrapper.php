@@ -2,18 +2,17 @@
 
 namespace Sitefrog\View\Components\Form;
 
-use Illuminate\View\View;
+use Sitefrog\View\Component;
 use Sitefrog\View\Form\Field;
 
-class FieldWrapper
+class FieldWrapper extends Component
 {
-    public function __construct(private Field $field) {}
+    public function __construct(public Field $field) {
+    }
 
-    public function render(): View
+    public static function getTemplate(): string
     {
-        return view('sitefrog::components.form.field-wrapper', [
-            'field' => $this->field
-        ]);
+        return 'sitefrog::components.form.field-wrapper';
     }
 
 

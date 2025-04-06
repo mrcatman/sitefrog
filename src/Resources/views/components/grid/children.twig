@@ -1,5 +1,9 @@
 <div class="sf-grid__children">
-    {% for child in children %}
+    {% for child in this.children %}
+        {% if attribute(child, 'tryRender') is defined %}
         {{ child.tryRender()  }}
+        {% else %}
+        {{ child }}
+        {% endif %}
     {% endfor %}
 </div>

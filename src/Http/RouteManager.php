@@ -51,8 +51,9 @@ class RouteManager {
             'prefix' => $url,
         ], function() use ($router, $controller, $name) {
             $router->name($name . '.index')->get('', [$controller, 'index']);
-            $router->name($name . '.edit')->get('edit', [$controller, 'edit']);
+            $router->name($name . '.edit')->any('{id}', [$controller, 'edit']);
             $router->name($name . '.create')->any('create', [$controller, 'create']);
+            $router->name($name . '.delete')->any('{id}/delete', [$controller, 'delete']);
         });
 
     }

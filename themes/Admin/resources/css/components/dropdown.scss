@@ -1,0 +1,31 @@
+.sf-dropdown {
+    display: inline-block;
+    border-bottom: 1px dashed;
+    cursor: pointer;
+    &__actions {
+        background: linear-gradient(#222, #111);
+        border: 1px solid #444;
+        z-index: 10;
+        border-radius: 8px;
+        flex-direction: column;
+        left: unset;
+    }
+
+    &:hover .sf-dropdown__actions, &__actions:hover {
+        display: flex;
+    }
+
+    &__action {
+        text-decoration: none;
+        border-bottom: 1px solid #444;
+        padding: 12px;
+
+        &:hover {
+            background: rgba(255, 255, 255, .05);
+        }
+
+        &:last-of-type {
+            border-bottom-width: 0;
+        }
+    }
+}
