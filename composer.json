@@ -11,6 +11,7 @@
         "laravel/tinker": "^2.9",
         "rcrowe/twigbridge": "^0.14.4",
         "scssphp/scssphp": "^2.0",
+        "spatie/laravel-permission": "^6.17",
         "twig/html-extra": "^3.20",
         "wikimedia/minify": "^2.8"
     },

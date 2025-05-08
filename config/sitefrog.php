@@ -2,7 +2,6 @@
 
 use Illuminate\Validation\Rules\Password;
 use Sitefrog\Http\Middleware\LoadWidgets;
-use Sitefrog\Http\Middleware\SetContext;
 use Sitefrog\Http\Middleware\SetHtmxHeaders;
 
 return [
@@ -33,6 +32,19 @@ return [
     'system_routes' => [
         'login' => 'sitefrog.auth::login'
     ],
+    'assets' => [
+        'css' => [
+            ['id' => 'sitefrog_css', 'source' => 'resources/css/index.scss'],
+        ],
+        'js' => [
+            ['id' => 'htmx_js','source' => 'resources/js/htmx.js'],
+            ['id' => 'sitefrog_common_js','source' => 'resources/js/common.js'],
+            ['id' => 'sitefrog_modals_js','source' => 'resources/js/features/modals.js'],
+        ]
+    ],
+    'htmx' => [
+        'boost' => true
+    ],
     'contexts' => [
         'default' => 'main',
         'list' => [
@@ -41,12 +53,9 @@ return [
                 'theme' => 'Default',
 
                 'css' => [
-                    ['source' => 'resources/css/index.scss'],
-                    ['source' => 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css']
+                    ['id' => 'bootstrap_css', 'source' => 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css']
                 ],
-                'js' => [
-                    ['source' => 'https://unpkg.com/htmx.org@2.0.4', 'params' => ['integrity' => 'sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+', 'crossorigin' => 'anonymous']]
-                ]
+                'js' => [ ]
             ],
             'admin' => [
                 'routes_prefix' => '/admin/',
@@ -54,19 +63,8 @@ return [
                 'middleware' => [
                     \Sitefrog\Http\Middleware\CheckGroup::class.':'.\Sitefrog\Models\UserGroup::$ROLE_ID_ADMIN
                 ],
-                'css' => [
-                    ['source' => 'resources/css/index.scss'],
-                   // ['source' => 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css']
-                ],
-                'js' => [
-                  //  ['source' => 'https://unpkg.com/htmx.org@2.0.4', 'params' => ['integrity' => 'sha384-HGfztofotfshcF7+8n44JQL2oJmowVChPTg48S+jvZoztPfvwD79OC/LTtG6dMp+', 'crossorigin' => 'anonymous']],
-                    ['source' => 'resources/js/htmx.js'],
-                //    ['source' => 'https://unpkg.com/hyperscript.org@0.9.14', 'params' => ['crossorigin' => 'anonymous']],
-                    ['source' => 'resources/js/features/modals.js'],
-                ],
-                'hyperscript' => [
-                 //   ['source' => 'resources/hyperscript/index.hs'],
-                ]
+                'css' => [],
+                'js' => [],
             ],
         ]
     ]

@@ -10,7 +10,7 @@ class AuthController extends BaseController {
     public function login()
     {
         if (auth()->user()) {
-            return redirect(sitefrogRoute('auth', 'profile'));
+            return redirect(request()->input('redirect', sitefrogRoute('auth', 'profile')));
         }
 
         $form = AuthHelper::getLoginForm('login');
@@ -20,7 +20,7 @@ class AuthController extends BaseController {
     public function register()
     {
         if (auth()->user()) {
-            return redirect(sitefrogRoute('auth', 'profile'));
+            return redirect(request()->input('redirect', sitefrogRoute('auth', 'profile')));
         }
 
         $form = AuthHelper::getRegisterForm('register');
@@ -40,7 +40,7 @@ class AuthController extends BaseController {
     public function logout()
     {
         auth()->logout();
-        RedirectManager::set('/');
+        request()->setRedirectUrl('/');
     }
 
 }

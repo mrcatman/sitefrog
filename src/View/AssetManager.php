@@ -15,13 +15,10 @@ class AssetManager
     private Collection $css;
     private Collection $js;
 
-    private Collection $hyperscript;
-
     public function __construct()
     {
         $this->css = collect([]);
         $this->js = collect([]);
-        $this->hyperscript = collect([]);
     }
 
     private function getFilters($type)
@@ -86,6 +83,7 @@ class AssetManager
         }
         return [
             'source' => route('sitefrog::assets', $cacheKey),
+            'id' => 'sitefrog_compiled_'.$type,
             'external' => false,
             'inline' => false
         ];
@@ -114,6 +112,7 @@ class AssetManager
 
     private function addAsset(
         Collection $assets,
+        string $id,
         string $source,
         bool $inline = false,
         array $params = [],
@@ -125,6 +124,7 @@ class AssetManager
             $this->checkFileExistence($source);
         }
         $assets->push([
+            'id' => $id,
             'source' => $source,
             'inline' => $inline,
             'external' => $external,
@@ -135,56 +135,41 @@ class AssetManager
 
     public function addCss(
         string $source,
+        string $id,
         bool $inline = false,
         array $params = []
     ): void
     {
-       $this->addAsset($this->css, $source, $inline, $params);
+       $this->addAsset($this->css, $id, $source, $inline, $params);
     }
 
     public function addJs(
         string $source,
+        string $id,
         bool $inline = false,
         array $params = []
     )
     {
-        $this->addAsset($this->js, $source, $inline, $params);
+        $this->addAsset($this->js, $id, $source, $inline, $params);
     }
-
-    public function addHyperscript(
-        string $source,
-        bool $inline = false,
-        array $params = []
-    )
-    {
-        $this->addAsset($this->hyperscript, $source, $inline, $params);
-    }
-
 
     public function loadGlobals()
     {
-        $css = Context::getParam('css', null, []);
+        $css = array_merge(config('sitefrog.assets.css', []), Context::getParam('css', null, []));
         foreach ($css as $stylesheet) {
             $this->addCss(
                 $stylesheet['source'],
-                inline: $script['inline'] ?? false,
+                id: $stylesheet['id'],
+                inline: $stylesheet['inline'] ?? false,
                 params: $stylesheet['params'] ?? []
             );
         }
 
-        $js = Context::getParam('js', null, []);
+        $js = array_merge(config('sitefrog.assets.js', []), Context::getParam('js', null, []));
         foreach ($js as $script) {
             $this->addJs(
                 $script['source'],
-                inline: $script['inline'] ?? false,
-                params: $script['params'] ?? []
-            );
-        }
-
-        $hyperscript = Context::getParam('hyperscript', null, []);
-        foreach ($hyperscript as $script) {
-            $this->addHyperscript(
-                $script['source'],
+                id: $script['id'],
                 inline: $script['inline'] ?? false,
                 params: $script['params'] ?? []
             );

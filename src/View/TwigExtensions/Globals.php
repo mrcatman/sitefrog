@@ -2,6 +2,7 @@
 
 namespace Sitefrog\View\TwigExtensions;
 
+use Sitefrog\Facades\Context;
 use Sitefrog\Facades\Page;
 use Sitefrog\View\HTMX;
 use Twig\Extension\AbstractExtension;
@@ -22,13 +23,21 @@ class Globals extends AbstractExtension
             new TwigFunction('page_title', [$this, 'pageTitle'], [ 'is_safe' => ['all']]),
             new TwigFunction('page_title_full', [$this, 'pageTitleFull'], [ 'is_safe' => ['all']]),
 
+            new TwigFunction('context', [$this, 'context'], [ 'is_safe' => ['all']]),
+
             new TwigFunction('is_htmx_request', [$this, 'isHtmxRequest'], [ 'is_safe' => ['all']]),
             new TwigFunction('is_form_request', [$this, 'isFormRequest'], [ 'is_safe' => ['all']]),
             new TwigFunction('is_modal_request', [$this, 'isModalRequest'], [ 'is_safe' => ['all']]),
-
+            new TwigFunction('body_attributes', [$this, 'bodyAttributes'], [ 'is_safe' => ['all']]),
 
         ];
     }
+
+    public function context(): string
+    {
+        return Context::current();
+    }
+
 
     public function pageTitle(): string
     {
@@ -49,10 +58,14 @@ class Globals extends AbstractExtension
         return HTMX::isFormRequest();
     }
 
-
     public function isModalRequest(): bool
     {
         return HTMX::isModalRequest();
+    }
+
+    public function bodyAttributes()
+    {
+        return HTMX::bodyAttributes();
     }
 
 }

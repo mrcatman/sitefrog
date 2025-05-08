@@ -1,9 +1,9 @@
 {% for asset in assets %}
     {% if asset.inline %}
-        <script>
+        <script hx-preserve="true" id="{{ asset.id }}">
             {{ asset.source }}
         </script>
     {% else %}
-        <script src="{{ asset.source }}"></script>
+        <script hx-preserve="true" id="{{ asset.id }}" src="{{ asset.source }}"></script>
     {% endif %}
 {% endfor %}

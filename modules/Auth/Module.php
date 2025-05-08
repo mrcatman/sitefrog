@@ -2,6 +2,7 @@
 namespace Modules\Auth;
 
 use Illuminate\Routing\Router;
+use Modules\Auth\Controllers\Admin\RolesResourceController;
 use Modules\Auth\Controllers\Admin\UsersController;
 use Modules\Auth\Controllers\Admin\UsersResourceController;
 use Modules\Auth\Controllers\AuthController;
@@ -37,6 +38,13 @@ class Module extends BaseModule
                 name: $this->getRouteName('admin.users.list')
             );
 
+            RouteManager::resource(
+                router: $router,
+                controller: RolesResourceController::class,
+                url: 'users/roles',
+                name: $this->getRouteName('admin.users.roles')
+            );
+
         }, 'admin');
 
         $this->registerWidget('auth-block', AuthBlock::class);
@@ -48,12 +56,16 @@ class Module extends BaseModule
                 url: sitefrogRoute('auth', 'admin.users.index'),
                 children: [
                     new MenuItem(
-                        title: __('sitefrog.auth::admin.settings'),
+                        title: __('sitefrog.auth::admin.users.settings'),
                         url: sitefrogRoute('auth', 'admin.users.settings')
                     ),
                     new MenuItem(
-                        title: __('sitefrog.auth::admin.list'),
+                        title: __('sitefrog.auth::admin.users.list'),
                         url: sitefrogRoute('auth', 'admin.users.list.index')
+                    ),
+                    new MenuItem(
+                        title: __('sitefrog.auth::admin.roles.list'),
+                        url: sitefrogRoute('auth', 'admin.users.roles.index')
                     )
                 ]
             )

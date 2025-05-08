@@ -85,7 +85,7 @@ class AuthHelper
         request()->session()->regenerate();
 
         $redirect = request()->input('redirect', sitefrogRoute('auth', 'register'));
-        RedirectManager::set($redirect);
+        request()->setRedirectUrl($redirect);
     }
 
     public static function register(Form $form)
@@ -104,7 +104,7 @@ class AuthHelper
         $user->save();
         Auth::login($user);
 
-        RedirectManager::set(sitefrogRoute('auth', 'profile'));
+        request()->setRedirectUrl(sitefrogRoute('auth', 'profile'));
     }
 
 }

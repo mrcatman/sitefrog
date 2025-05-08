@@ -2,11 +2,10 @@
 <head>
     {{ component('head') }}
 </head>
-<body>
-{{ component('grid', { file: __sf_grid_file }) }}
+<body {{ html_attributes(body_attributes()) }}>
+{{ component('grid', { file: __sf_grid_file, root: true }) }}
 
 {{ component('assets', { type: 'js' }) }}
-
 {{ component('modals-container') }}
 </body>
 

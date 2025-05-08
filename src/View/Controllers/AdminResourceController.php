@@ -51,6 +51,11 @@ class AdminResourceController extends BaseController
         ];
     }
 
+    protected function setTranslations($translations)
+    {
+        $this->translations = array_merge($this->translations, $translations);
+    }
+
     protected function buildForm($item = null): Form
     {
         throw new \Exception("You need to implement a form");
@@ -108,7 +113,7 @@ class AdminResourceController extends BaseController
         $form->setAction($item ? $this->getUrl('edit', $item) : $this->getUrl('create'));
         $form->setSubmitLabel($this->translations['form'][$item ? 'edit' : 'create']['button']);
 
-        $form->onSubmit(fn() => $this->submit($form, $item));
+        $form->onSubmit(fn($form) => $this->submit($form, $item));
         FormManager::register($form);
 
         return $form;
@@ -183,6 +188,15 @@ class AdminResourceController extends BaseController
             new Box(
                 heading: Page::getTitle(),
                 children: [
+                    'actions' => [
+                        new Button(
+                            content: __('sitefrog::common.create'),
+                            attrs: [
+                                'href' => $this->getUrl('create'),
+                                'modal' => true
+                            ]
+                        ),
+                    ],
                     'main' => [
                         new FiltersWrapper(
                             children: [
@@ -202,35 +216,10 @@ class AdminResourceController extends BaseController
                 ]
             )
         ]);
-
     }
 
-    public function create()
+    private function renderForm($item = null)
     {
-        Page::setTitle($this->translations['form']['create']['title']);
-        return $this->renderGrid([
-            new Box(
-                heading: Page::getTitle(),
-                children: [
-                    'main' => [
-                        new FormComponent(
-                            $this->getEditForm()
-                        )
-                    ]
-                ]
-            )
-        ]);
-    }
-
-    public function edit(int $id)
-    {
-        $item = $this->resource::find($id);
-        if (!$item) {
-            throw new \Exception("Not found"); // todo: Not found page
-        }
-
-        Page::setTitle($this->translations['form']['edit']['title']);
-
         $formComponent = new FormComponent(
             $this->getEditForm($item)
         );
@@ -242,7 +231,7 @@ class AdminResourceController extends BaseController
         }
         return $this->renderGrid([
             new Box(
-                heading: $this->translations['form']['edit']['title'],
+                heading: Page::getTitle(),
                 children: [
                     'main' => [
                         $formComponent
@@ -258,6 +247,24 @@ class AdminResourceController extends BaseController
                 ]
             )
         ]);
+    }
+
+    public function create()
+    {
+        Page::setTitle($this->translations['form']['create']['title']);
+        return $this->renderForm();
+
+    }
+
+    public function edit(int $id)
+    {
+        $item = $this->resource::find($id);
+        if (!$item) {
+            throw new \Exception("Not found"); // todo: Not found page
+        }
+
+        Page::setTitle($this->translations['form']['edit']['title']);
+        return $this->renderForm($item);
     }
 
     public function delete($id)
@@ -300,16 +307,36 @@ class AdminResourceController extends BaseController
         ]);
     }
 
-    public function submit(Form $form, $item)
+    public function submit(Form $form, $item = null)
     {
+        if (!$item) {
+            $item = new $this->resource();
+        }
 
-        echo 'test';
+        $data = $form->getData();
+
+        $item->fill($data);
+        $item->save();
+
+        $this->afterSubmit();
     }
 
     public function submitDelete(Form $form, $item)
     {
-        $this->closeModal();
-        echo 'test';
+        $item->delete();
+        $this->afterSubmit();
+    }
+
+    private function afterSubmit()
+    {
+        if (request()->referer() == $this->getUrl('index')) {
+            request()->htmxTrigger('sitefrog:refresh');
+        }
+        if (request()->modal()) {
+            request()->closeModal();
+        } else {
+            request()->setRedirectUrl($this->getUrl('index'));
+        }
     }
 
 

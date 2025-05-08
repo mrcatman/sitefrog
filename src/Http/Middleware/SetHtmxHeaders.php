@@ -4,6 +4,7 @@ namespace Sitefrog\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
+use Sitefrog\Facades\Context;
 use Symfony\Component\HttpFoundation\Response;
 
 class SetHtmxHeaders
@@ -21,6 +22,16 @@ class SetHtmxHeaders
             $response->headers->remove('Location');
             $response->headers->set('HX-Location', $response->getTargetUrl());
         }
+
+        if (request()->input('_sf_context') != Context::current()) {
+            $response->headers->set('HX-Refresh', 'true');
+        }
+
+        $triggers = $request->getHtmxTriggers();
+        if (count($triggers) > 0) {
+            $response->headers->set('HX-Trigger', json_encode($triggers));
+        }
+
 
         return $response;
     }

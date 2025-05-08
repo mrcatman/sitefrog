@@ -30,7 +30,7 @@ class Form
 
     public function onSubmit($fn)
     {
-        if (request()->input('_sf_form') !== $this->name) {
+        if (request()->form() !== $this->name) {
             return;
         }
 
@@ -49,7 +49,7 @@ class Form
                 $this->setErrors($field, $errors);
             }
         } else {
-            $this->data = $validator->getData();
+            $this->data = $validator->validated();
             $fn($this);
         }
     }

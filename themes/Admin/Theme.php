@@ -12,7 +12,7 @@ class Theme extends BaseTheme
     {
         parent::load();
 
-        $this->addCss('resources/css/index.scss');
+        $this->addCss('resources/css/index.scss', 'admin_css');
         $this->setDefaultLayout('resources/views/layouts/default.json');
     }
 

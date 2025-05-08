@@ -1,9 +1,9 @@
 {% for asset in assets %}
     {% if asset.inline %}
-        <style>
+        <style hx-preserve="true" id="{{ asset.id }}">
             {{ asset.source }}
         </style>
     {% else %}
-        <link rel="stylesheet" href="{{ asset.source }}" />
+        <link hx-preserve="true" id="{{ asset.id }}" rel="stylesheet" href="{{ asset.source }}" />
     {% endif %}
 {% endfor %}

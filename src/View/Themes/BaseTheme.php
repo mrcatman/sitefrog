@@ -12,12 +12,14 @@ class BaseTheme
 
     public function addCss(
         string $source,
+        string $id,
         bool $inline = false,
         array $params = []
     )
     {
         return AssetManager::addCss(
             source: Storage::disk('themes')->path("$this->name/$source"),
+            id: $id,
             inline: $inline,
             params: $params
         );
@@ -25,12 +27,14 @@ class BaseTheme
 
     public function addJs(
         string $source,
+        string $id,
         bool $inline = false,
         array $params = []
     )
     {
         return AssetManager::addJs(
             source: Storage::disk('themes')->path("$this->name/$source"),
+            id: $id,
             inline: $inline,
             params: $params
         );

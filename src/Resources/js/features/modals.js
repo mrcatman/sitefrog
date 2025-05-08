@@ -89,8 +89,7 @@ const processModals = (el) => {
             const content = modal.querySelector('[data-modal-content]');
             content.setAttribute('hx-get', trigger.href);
             content.setAttribute('hx-vals', JSON.stringify({
-                _sf_modal: true,
-                _sf_modal_id: randomId,
+                _sf_modal: randomId,
             }));
 
             resizeModal(modal, content);
@@ -106,5 +105,9 @@ const processModals = (el) => {
 }
 
 document.addEventListener('DOMContentLoaded', () => processModals(document.body))
-
 document.body.addEventListener('htmx:afterSettle', (e) => processModals(e.target));
+
+document.body.addEventListener("sitefrog:close-modal", function(e){
+    const modal = document.querySelector('.modal[data-random-id="' + e.detail.modal + '"]');
+    modal.parentNode.removeChild(modal);
+})

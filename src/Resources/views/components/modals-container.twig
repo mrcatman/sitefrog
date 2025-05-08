@@ -1,13 +1,13 @@
-<div data-modals-container></div>
+<div data-modals-container hx-preserve="true"></div>
 
-<div data-modal-template style="display:none">
+<div data-modal-template style="display:none" hx-preserve="true">
     <div class="modal" data-modal>
         <div class="modal__main">
             <div class="modal__top" data-modal-top>
                 <div id="modal_title" class="modal__title"></div>
             </div>
             <div class="modal__close" data-modal-close>x</div>
-            <div class="modal__content" data-modal-content hx-trigger="load">
+            <div class="modal__content" data-modal-content hx-trigger="load" >
                 <div class="preloader"></div>
             </div>
         </div>

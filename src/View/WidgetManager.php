@@ -31,6 +31,10 @@ class WidgetManager
             'admin' => [
                 'aside' => [
                     [
+                        'class' => 'sitefrog.auth::welcome',
+                        'params' => []
+                    ],
+                    [
                         'class' => 'sitefrog.menu',
                         'params' => [
                             'id' => 'admin'
