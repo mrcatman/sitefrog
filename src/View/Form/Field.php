@@ -8,7 +8,6 @@ use Sitefrog\Traits\MagicGetSet;
 class Field extends Component
 {
     use MagicGetSet;
-    protected string $view;
 
     private array $errors = [];
 
@@ -17,9 +16,30 @@ class Field extends Component
         protected ?string $value = null,
         protected ?string $label = null,
         protected ?array $attrs = [],
-        protected ?array $validationRules = []
+        protected ?array $rules = []
     )
     {
+    }
+
+    public function getValidationRules()
+    {
+        return [
+            $this->name => $this->rules
+        ];
+    }
+
+    public function setValues(mixed $values)
+    {
+        if (isset($values->{$this->getName()})) {
+            $this->value = $values->{$this->getName()};
+        }
+    }
+
+    public function setErrors(mixed $errors)
+    {
+        if (isset($errors[$this->getName()])) {
+            $this->errors = $errors[$this->getName()];
+        }
     }
 
     public function hasErrors()

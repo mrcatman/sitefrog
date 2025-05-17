@@ -45,31 +45,31 @@ class Form
         );
 
         if ($validator->fails()) {
-            foreach ($validator->errors()->getMessages() as $field => $errors) {
-                $this->setErrors($field, $errors);
-            }
+            $this->setErrors($validator->errors()->getMessages());
         } else {
             $this->data = $validator->validated();
             $fn($this);
         }
     }
 
-    private function getFieldByName(string $name)
+    private function getFieldByName(string $name) // todo: handle FormGroups
     {
         return $this->fields->firstWhere(function($field) use ($name) {
             return $field->getName() === $name;
         });
     }
 
-    public function setErrors(string $name, array $errors)
-    {
-        return $this->getFieldByName($name)?->setErrors($errors);
-    }
-
     public function setValues(mixed $values)
     {
         $this->fields->each(function($field) use ($values) {
-            $field->setValue($values->{$field->getName()});
+            $field->setValues($values);
+        });
+    }
+
+    public function setErrors(mixed $errors)
+    {
+        $this->fields->each(function($field) use ($errors) {
+            $field->setErrors($errors);
         });
     }
 
@@ -77,7 +77,7 @@ class Form
     {
         $rules = [];
         foreach ($this->getFields() as $field) {
-            $rules[$field->getName()] = $field->getValidationRules();
+            $rules = array_merge($rules, $field->getValidationRules());
         }
         return $rules;
     }

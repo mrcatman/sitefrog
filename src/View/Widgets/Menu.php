@@ -30,7 +30,7 @@ class Menu extends Widget
                 new Input(
                     name: 'id',
                     label: 'menu id',
-                    validationRules: ['required']
+                    rules: ['required']
                 ),
             ]
         );

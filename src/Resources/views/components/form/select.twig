@@ -1,0 +1,15 @@
+{% set _field = this %}
+{% component 'form.field-wrapper' with { field: _field } %}
+    {% block main %}
+        <select
+            {{ html_attributes({
+                name: _field.getName(),
+                class: ['sf-form__input', 'sf-form__select']
+            }, _field.getAttrs()) }}
+        >
+            {% for value, name in _field.getOptions() %}
+            <option value="{{ value }}">{{name}}</option>
+            {% endfor %}
+        </select>
+    {% endblock %}
+{% endcomponent %}

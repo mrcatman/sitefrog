@@ -47,7 +47,7 @@ class RolesResourceController extends AdminResourceController {
                 new Input(
                     name: 'name',
                     label: __('sitefrog.auth::fields.role_name'),
-                    validationRules: ['required']
+                    rules: ['required']
                 ),
             ]
         );

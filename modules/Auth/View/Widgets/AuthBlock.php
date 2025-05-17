@@ -25,7 +25,7 @@ class AuthBlock extends Widget
                 new Input(
                     name: 'test',
                     label: 'test field',
-                    validationRules: ['required']
+                    rules: ['required']
                 ),
             ]
         );

@@ -1,0 +1,9 @@
+<div class="sf-form__group">
+    {% if this.getLabel() is not null %}
+        <label class="sf-form__group__label">{{this.getLabel()}}</label>
+    {% endif %}
+    <div class="sf-form__group__content">
+        {{ component('grid', { layout: this.getFields() }) }}
+    </div>
+
+</div>

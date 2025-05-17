@@ -4,10 +4,13 @@ namespace Modules\Auth\Controllers\Admin;
 use Illuminate\Database\Eloquent\Builder;
 use Sitefrog\Models\User;
 use Sitefrog\View\Controllers\AdminResourceController;
+use Sitefrog\View\Form\Fields\FormGroup;
 use Sitefrog\View\Form\Fields\Input;
+use Sitefrog\View\Form\Fields\Select;
 use Sitefrog\View\Form\Form;
 use Sitefrog\View\Table\Column;
 use Sitefrog\View\Table\Table;
+use Spatie\Permission\Models\Role;
 
 class UsersResourceController extends AdminResourceController {
 
@@ -27,17 +30,35 @@ class UsersResourceController extends AdminResourceController {
     {
         return new Form(
             fields: [
-                new Input(
-                    name: 'username',
-                    label: __('sitefrog.auth::fields.username'),
-                    validationRules: ['required', 'min:10']
+                new FormGroup(
+                    label: __('sitefrog.auth::fields.common'),
+                    fields: [
+                        new Input(
+                            name: 'username',
+                            label: __('sitefrog.auth::fields.username'),
+                            rules: ['required', 'min:10']
+                        ),
+                        new Input(
+                            name: 'email',
+                            type: 'email',
+                            label: __('sitefrog.auth::fields.email'),
+                            rules: ['required', 'email']
+                        ),
+                    ]
                 ),
-                new Input(
-                    name: 'email',
-                    type: 'email',
-                    label: __('sitefrog.auth::fields.email'),
-                    validationRules: ['required', 'email']
-                ),
+                new FormGroup(
+                    label: __('sitefrog.auth::fields.permissions'),
+                    fields: [
+                        new Select(
+                            name: 'roles',
+                            options: Role::pluck('name', 'id'),
+                            multiple: true,
+                            label: __('sitefrog.auth::fields.group_id'),
+                            rules: ['required', 'min:10'],
+                        ),
+                    ]
+                )
+
             ]
         );
     }

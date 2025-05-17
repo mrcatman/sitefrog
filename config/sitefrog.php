@@ -61,7 +61,7 @@ return [
                 'routes_prefix' => '/admin/',
                 'theme' => 'Admin',
                 'middleware' => [
-                    \Sitefrog\Http\Middleware\CheckGroup::class.':'.\Sitefrog\Models\UserGroup::$ROLE_ID_ADMIN
+                    \Spatie\Permission\Middleware\RoleMiddleware::class.':superadmin'
                 ],
                 'css' => [],
                 'js' => [],

@@ -5,5 +5,6 @@ return [
     Sitefrog\Providers\HelpersServiceProvider::class,
     Sitefrog\Providers\RequestServiceProvider::class,
     Sitefrog\Providers\ComponentsServiceProvider::class,
+    Sitefrog\Providers\CommandsServiceProvider::class,
     Sitefrog\Providers\MainServiceProvider::class,
 ];

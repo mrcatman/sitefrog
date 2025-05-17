@@ -21,12 +21,12 @@ class AuthHelper
                 new Input(
                     name: 'username',
                     label: __('sitefrog.auth::fields.username'),
-                    validationRules: ['required']
+                    rules: ['required']
                 ),
                 (new Input(
                     name: 'password',
                     label: __('sitefrog.auth::fields.password'),
-                    validationRules: ['required']
+                    rules: ['required']
                 ))->setType('password'),
             ]
         );
@@ -44,17 +44,17 @@ class AuthHelper
                 new Input(
                     name: 'username',
                     label: __('sitefrog.auth::fields.username'),
-                    validationRules: ['required']
+                    rules: ['required']
                 ),
                 (new Input(
                     name: 'password',
                     label: __('sitefrog.auth::fields.password'),
-                    validationRules: ['required', 'confirmed']
+                    rules: ['required', 'confirmed']
                 ))->setType('password'),
                 (new Input(
                     name: 'password_confirmation',
                     label: __('sitefrog.auth::fields.password_confirmation'),
-                    validationRules: ['required', config('sitefrog.auth.passwords.rules')]
+                    rules: ['required', config('sitefrog.auth.passwords.rules')]
                 ))->setType('password'),
             ]
         );
@@ -64,7 +64,7 @@ class AuthHelper
                 (new Input(
                     name: 'email',
                     label: __('sitefrog.auth::fields.email'),
-                    validationRules: ['required', 'email']
+                    rules: ['required', 'email']
                 ))->setType('email'),
             );
         }
@@ -80,7 +80,7 @@ class AuthHelper
     {
         $data = $form->getData();
         if (!Auth::attempt(['username' => $data['username'], 'password' => $data['password']])) { // todo: email auth
-            return $form->setErrors('username', [__('sitefrog.auth::messages.wrong_credentials')]);
+            return $form->setErrors(['username' => [__('sitefrog.auth::messages.wrong_credentials')]]);
         }
         request()->session()->regenerate();
 
@@ -92,11 +92,11 @@ class AuthHelper
     {
         $data = $form->getData();
         if (User::where(['username' => $data['username']])->count()) {
-            return $form->setErrors('username', [__('sitefrog.auth::messages.username_taken')]);
+            return $form->setErrors(['username' => [__('sitefrog.auth::messages.username_taken')]]);
         }
         if (config('sitefrog.auth.emails.enable')) {
             if (User::where(['email' => $data['email']])->count()) {
-                return $form->setErrors('email', [__('sitefrog.auth::messages.email_taken')]);
+                return $form->setErrors(['email' => [__('sitefrog.auth::messages.email_taken')]]);
             }
         }
         $user = new User($data);
