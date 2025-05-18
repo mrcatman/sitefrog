@@ -4,7 +4,6 @@ namespace Sitefrog\Commands;
 
 use Illuminate\Console\Command;
 use Sitefrog\Models\User;
-use Spatie\Permission\Models\Role;
 
 class AddRole extends Command
 {

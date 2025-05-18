@@ -111,7 +111,10 @@ class AdminResourceController extends BaseController
             ->setMethod($item ? 'PUT' : 'POST');
 
         $form->setAction($item ? $this->getUrl('edit', $item) : $this->getUrl('create'));
-        $form->setSubmitLabel($this->translations['form'][$item ? 'edit' : 'create']['button']);
+
+        if (isset($this->translations['form'][$item ? 'edit' : 'create']['button'])) {
+            $form->setSubmitLabel($this->translations['form'][$item ? 'edit' : 'create']['button']);
+        }
 
         $form->onSubmit(fn($form) => $this->submit($form, $item));
         FormManager::register($form);
@@ -135,10 +138,11 @@ class AdminResourceController extends BaseController
             $form->setValues($item);
         }
 
-        $form->setName($this->resource . '-delete')->setMethod('DELETE');
-
         $form->setAction($this->getUrl('delete', $item));
-        $form->setSubmitLabel($this->translations['form']['delete']['button']);
+
+        if (isset($this->translations['form']['delete']['button'])) {
+            $form->setSubmitLabel($this->translations['form']['delete']['button']);
+        }
 
         $form->onSubmit(fn() => $this->submitDelete($form, $item));
         FormManager::register($form);

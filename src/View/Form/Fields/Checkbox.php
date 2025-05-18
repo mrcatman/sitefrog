@@ -2,13 +2,13 @@
 
 namespace Sitefrog\View\Form\Fields;
 
+use Illuminate\Support\Collection;
 use Sitefrog\View\Form\Field;
 
-class Input extends Field
+class Checkbox extends Field
 {
     public function __construct(
         protected string $name,
-        protected string $type = 'text',
         protected $value = null,
         protected ?array $attrs = [],
         protected ?string $label = null,
@@ -25,7 +25,7 @@ class Input extends Field
     }
     public static function getTemplate(): string
     {
-        return 'sitefrog::components.form.input';
+        return 'sitefrog::components.form.checkbox';
     }
 
 }

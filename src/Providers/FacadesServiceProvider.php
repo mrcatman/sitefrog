@@ -5,6 +5,7 @@ namespace Sitefrog\Providers;
 use Illuminate\Support\ServiceProvider;
 use Sitefrog\Context;
 use Sitefrog\Http\RouteManager;
+use Sitefrog\Permissions\PermissionManager;
 use Sitefrog\View\AssetManager;
 use Sitefrog\View\ComponentManager;
 use Sitefrog\View\FormManager;
@@ -26,6 +27,7 @@ class FacadesServiceProvider extends ServiceProvider {
 
     public function boot(): void {
         $this->registerFacades();
+        $this->registerSingletons();
     }
 
     private function registerFacades()
@@ -33,7 +35,6 @@ class FacadesServiceProvider extends ServiceProvider {
         $this->app->bind('context', Context::class);
         $this->app->bind('page-data', PageData::class);
         $this->app->bind('page', Page::class);
-        $this->app->bind('menu-manager', MenuManager::class);
         $this->app->bind('component-manager', ComponentManager::class);
         $this->app->bind('widget-manager', WidgetManager::class);
         $this->app->bind('form-manager', FormManager::class);
@@ -42,6 +43,17 @@ class FacadesServiceProvider extends ServiceProvider {
         $this->app->bind('asset-manager', AssetManager::class);
         $this->app->bind('route-manager', RouteManager::class);
         $this->app->bind('theme-manager', ThemeManager::class);
+    }
+
+    private function registerSingletons()
+    {
+        $this->app->singleton(MenuManager::class, function () {
+            return new MenuManager();
+        });
+
+        $this->app->singleton(PermissionManager::class, function () {
+            return new PermissionManager();
+        });
     }
 
 

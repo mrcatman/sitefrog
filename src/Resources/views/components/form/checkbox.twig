@@ -2,13 +2,13 @@
 {% component 'form.field-wrapper' with { field: _field } %}
     {% block main %}
         <input
+            type="checkbox"
             {{ html_attributes({
                 id: _field.getId(),
+                checked: _field.getValue(),
                 name: _field.getName(),
-                type: _field.getType(),
-                value: _field.getValue(),
-                class: [  'sf-form__input', 'sf-form__input--' ~ _field.getType()]
+                class: ['sf-form__checkbox'],
             }, _field.getAttrs()) }}
-        />
+         />
     {% endblock %}
 {% endcomponent %}

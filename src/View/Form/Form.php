@@ -28,6 +28,11 @@ class Form
         $this->fields = collect($fields);
     }
 
+    public function addField(Field $field)
+    {
+        $this->fields->add($field);
+    }
+
     public function onSubmit($fn)
     {
         if (request()->form() !== $this->name) {

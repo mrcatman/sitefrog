@@ -1,6 +1,6 @@
 <div class="sf-form__field-wrapper {% if this.field.hasErrors() %} sf-form__field-wrapper--with-errors {% endif %}">
     {% if this.field.getLabel() is not null %}
-    <label class="sf-form__label">{{this.field.getLabel()}}</label>
+    <label for="{{ this.field.getId() }}" class="sf-form__label">{{this.field.getLabel()}}</label>
     {% endif %}
     <div class="sf-form__field">
         {% block main %}

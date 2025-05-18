@@ -70,6 +70,8 @@ class Module extends BaseModule
                 ]
             )
         ]);
+
+        $this->registerResourcePermissions('users', null, ['create']);
     }
 
 }

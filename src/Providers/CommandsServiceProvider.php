@@ -4,6 +4,7 @@ namespace Sitefrog\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Sitefrog\Commands\AddRole;
+use Sitefrog\Commands\SyncPermissions;
 
 class CommandsServiceProvider extends ServiceProvider {
 
@@ -14,11 +15,9 @@ class CommandsServiceProvider extends ServiceProvider {
 
     public function boot(): void {
         $this->commands([
-            AddRole::class
+            AddRole::class,
+            SyncPermissions::class
         ]);
     }
-
-
-
 
 }

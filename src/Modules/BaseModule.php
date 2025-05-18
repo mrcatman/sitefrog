@@ -1,9 +1,10 @@
 <?php
 namespace Sitefrog\Modules;
 
-use Sitefrog\Facades\MenuManager;
-use Sitefrog\Facades\WidgetManager;
-use Sitefrog\Facades\RouteManager;
+use Sitefrog\Permissions\PermissionManager;
+use Sitefrog\View\MenuManager;
+use Sitefrog\View\WidgetManager;
+use Sitefrog\Http\RouteManager;
 
 class BaseModule {
 
@@ -12,7 +13,18 @@ class BaseModule {
     public $hasViews = false;
     public $hasTranslations = false;
 
+    public function __construct(
+        private MenuManager $menuManager,
+        private WidgetManager $widgetManager,
+        private RouteManager $routeManager,
+        private PermissionManager $permissionManager
+    )
+    {
+    }
+
     public function load(): void {}
+
+
 
     public function getPath()
     {
@@ -29,9 +41,9 @@ class BaseModule {
         return $this->getPath()."/Resources/lang";
     }
 
-    public function getNamespace()
+    public function getNamespace($full = true)
     {
-        return 'sitefrog.'.mb_strtolower($this->name);
+        return ($full ? 'sitefrog.' : '').mb_strtolower($this->name);
     }
 
     public function getRouteName($name)
@@ -41,19 +53,27 @@ class BaseModule {
 
     protected function registerRoutes($fn, $context = null)
     {
-        RouteManager::registerWebRoutes($fn, $context, [
+        $this->routeManager->registerWebRoutes($fn, $context, [
             //'name' => $this->getNamespace().'.'
         ]);
     }
 
     protected function registerWidget(string $widgetName, string $class)
     {
-        WidgetManager::register($this->getNamespace()."::$widgetName", $class);
+        $this->widgetManager->register($this->getNamespace()."::$widgetName", $class);
     }
 
     protected function registerAdminMenuItems(array $items)
     {
-        MenuManager::addItems('admin', $items);
+        $this->menuManager->addItems('admin', $items);
+    }
+
+    protected function registerResourcePermissions($group, $labels_prefix = null, $except = [], $override_defaults = [])
+    {
+        if (!$labels_prefix) {
+            $labels_prefix = $this->getNamespace().'::permissions.'.$group;
+        }
+        $this->permissionManager->registerResource($this->getNamespace(false).'.'.$group, $labels_prefix, $except, $override_defaults);
     }
 
 

@@ -24,6 +24,7 @@ class ComponentManager
     public function makeInstance($name, $data)
     {
         $class = $this->get($name);
+
         $reflection = new ReflectionClass($class);
         $constructor = $reflection->getConstructor();
         if (!$constructor) {
@@ -37,7 +38,12 @@ class ComponentManager
             if (isset($data[$param->getName()])) {
                 $constructorArgs[$param->getName()] = $data[$param->getName()];
             } else {
-                $constructorArgs[$param->getName()] = $param->isDefaultValueAvailable() ? $param->getDefaultValue() : null;
+                if ($param->isDefaultValueAvailable()) {
+                    $constructorArgs[$param->getName()] = $param->getDefaultValue();
+                } else {
+                    $constructorArgs[$param->getName()] = app()->make($param->getType()->getName());
+                }
+
             }
         }
         return $reflection->newInstanceArgs($constructorArgs);

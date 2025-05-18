@@ -3,8 +3,10 @@
     {% block main %}
         <select
             {{ html_attributes({
+                id: _field.getId(),
                 name: _field.getName(),
-                class: ['sf-form__input', 'sf-form__select']
+                class: ['sf-form__input', 'sf-form__select'],
+                multiple:  _field.getMultiple(),
             }, _field.getAttrs()) }}
         >
             {% for value, name in _field.getOptions() %}

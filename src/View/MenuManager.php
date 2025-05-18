@@ -3,7 +3,6 @@
 namespace Sitefrog\View;
 
 use Sitefrog\View\Menu\Menu;
-use Sitefrog\View\Menu\MenuSection;
 
 class MenuManager
 {

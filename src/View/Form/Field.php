@@ -13,12 +13,17 @@ class Field extends Component
 
     public function __construct(
         protected string $name,
-        protected ?string $value = null,
+        protected $value = null,
         protected ?string $label = null,
         protected ?array $attrs = [],
         protected ?array $rules = []
     )
     {
+    }
+
+    public function getId()
+    {
+        return 'field_'.$this->name; // todo: add form name?
     }
 
     public function getValidationRules()
