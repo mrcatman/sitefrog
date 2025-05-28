@@ -5,11 +5,12 @@ namespace Sitefrog\View\Form\Fields;
 use Illuminate\Support\Collection;
 use Sitefrog\View\Form\Field;
 
-class Checkbox extends Field
+class Radio extends Field
 {
     public function __construct(
         protected string $name,
         protected $value = null,
+        protected $radioValue = null,
         protected ?array $attrs = [],
         protected ?string $label = null,
         protected ?string $description = null,
@@ -26,9 +27,14 @@ class Checkbox extends Field
         );
     }
 
+    public function getId()
+    {
+        return parent::getId().'_'.$this->radioValue;
+    }
+
     public static function getTemplate(): string
     {
-        return 'sitefrog::components.form.checkbox';
+        return 'sitefrog::components.form.radio';
     }
 
 }

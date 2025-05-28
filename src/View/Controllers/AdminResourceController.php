@@ -7,12 +7,14 @@ use Illuminate\Support\Facades\Route;
 use Sitefrog\Facades\ComponentManager;
 use Sitefrog\Facades\FormManager;
 use Sitefrog\Facades\Page;
+use Sitefrog\Repositories\Repository;
 use Sitefrog\View\Components\Admin\FiltersWrapper;
 use Sitefrog\View\Components\Box;
 use Sitefrog\View\Components\Button;
 use Sitefrog\View\Form\Fields\Input;
 use Sitefrog\View\Form\Form;
 use Sitefrog\View\HTMX;
+use Sitefrog\View\RepositoryManager;
 use Sitefrog\View\Table\Column;
 use Sitefrog\View\Table\Table;
 use Sitefrog\View\Components\Form\Form as FormComponent;
@@ -27,8 +29,13 @@ class AdminResourceController extends BaseController
 
     protected $translations = [];
 
-    public function __construct()
+    protected Repository $repository;
+
+    public function __construct(
+        protected RepositoryManager $repositoryManager
+    )
     {
+        $this->repository = $this->repositoryManager->getFor($this->resource);
         $this->translations = [
             'list' => [
                 'title' => __('sitefrog::common.list'),
@@ -49,11 +56,13 @@ class AdminResourceController extends BaseController
                 ],
             ]
         ];
+
+        parent::__construct();
     }
 
     protected function setTranslations($translations)
     {
-        $this->translations = array_merge($this->translations, $translations);
+        $this->translations = $this->translations + $translations;
     }
 
     protected function buildForm($item = null): Form
@@ -83,21 +92,28 @@ class AdminResourceController extends BaseController
 
     protected function getTableActions($item)
     {
-        return [
-            [
+        $actions = [];
+
+        if ($this->repository->hasPermissions('edit', $item)) {
+            $actions[] = [
                 'content' => __('sitefrog::common.edit'),
                 'attrs' => [
                     'href' => $this->getUrl('edit', $item),
                 ],
-            ],
-            [
+            ];
+        }
+
+        if ($this->repository->hasPermissions('delete', $item)) {
+            $actions[] = [
                 'content' => __('sitefrog::common.delete'),
                 'attrs' => [
                     'href' => $this->getUrl('delete', $item),
                     'modal' => true
                 ],
-            ]
-        ];
+            ];
+        }
+
+        return $actions;
     }
 
     protected function getEditForm($item = null)
@@ -257,15 +273,11 @@ class AdminResourceController extends BaseController
     {
         Page::setTitle($this->translations['form']['create']['title']);
         return $this->renderForm();
-
     }
 
     public function edit(int $id)
     {
-        $item = $this->resource::find($id);
-        if (!$item) {
-            throw new \Exception("Not found"); // todo: Not found page
-        }
+        $item = $this->repository->get($id);
 
         Page::setTitle($this->translations['form']['edit']['title']);
         return $this->renderForm($item);
@@ -273,12 +285,9 @@ class AdminResourceController extends BaseController
 
     public function delete($id)
     {
-        $item = $this->resource::find($id);
-        if (!$item) {
-            throw new \Exception("Not found");
-        }
-
         Page::setTitle($this->translations['form']['delete']['title']);
+
+        $item = $this->repository->get($id);
 
         $formComponent = new FormComponent(
             $this->getDeleteForm($item)
@@ -313,25 +322,20 @@ class AdminResourceController extends BaseController
 
     public function submit(Form $form, $item = null)
     {
-        if (!$item) {
-            $item = new $this->resource();
-        }
-
         $data = $form->getData();
+        $item = $item ? $this->repository->edit($item, $data) : $this->repository->create($data);
 
-        $item->fill($data);
-        $item->save();
-
-        $this->afterSubmit();
+        $this->afterSubmit($item);
     }
 
     public function submitDelete(Form $form, $item)
     {
-        $item->delete();
-        $this->afterSubmit();
+        $this->repository->delete($item);
+
+        $this->afterSubmit($item);
     }
 
-    private function afterSubmit()
+    private function afterSubmit($item)
     {
         if (request()->referer() == $this->getUrl('index')) {
             request()->htmxTrigger('sitefrog:refresh');

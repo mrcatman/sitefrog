@@ -37,6 +37,7 @@ return [
             ['id' => 'sitefrog_css', 'source' => 'resources/css/index.scss'],
         ],
         'js' => [
+            ['id' => 'alpine_js', 'external' => true, 'source' => 'https://unpkg.com/alpinejs'],
             ['id' => 'htmx_js','source' => 'resources/js/htmx.js'],
             ['id' => 'sitefrog_common_js','source' => 'resources/js/common.js'],
             ['id' => 'sitefrog_modals_js','source' => 'resources/js/features/modals.js'],

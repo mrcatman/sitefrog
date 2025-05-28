@@ -9,11 +9,20 @@ use Sitefrog\Facades\AssetManager;
 use Sitefrog\Facades\FormManager;
 use Sitefrog\Facades\LayoutManager;
 use Sitefrog\Facades\PageData;
-use Sitefrog\View\Components;
+use Sitefrog\View\Components\Form\Form;
 use Sitefrog\View\HTMX;
 
 class BaseController extends Controller
 {
+
+    public function __construct(
+
+    )
+    {
+        $this->initialize();
+    }
+
+    protected function initialize() {}
 
     protected function handleHtmxFormRequest()
     {
@@ -25,7 +34,7 @@ class BaseController extends Controller
             return redirect(request()->redirectUrl());
         }
 
-        return (new Components\Form\Form(
+        return (new Form(
             form: $form,
         ))->tryRender();
     }

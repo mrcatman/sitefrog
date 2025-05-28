@@ -12,6 +12,7 @@ class Input extends Field
         protected $value = null,
         protected ?array $attrs = [],
         protected ?string $label = null,
+        protected ?string $description = null,
         protected ?array $rules = []
     )
     {
@@ -19,6 +20,7 @@ class Input extends Field
             name: $name,
             value: $value,
             label: $label,
+            description: $description,
             attrs: $attrs,
             rules: $rules
         );

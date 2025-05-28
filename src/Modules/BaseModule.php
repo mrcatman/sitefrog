@@ -3,6 +3,7 @@ namespace Sitefrog\Modules;
 
 use Sitefrog\Permissions\PermissionManager;
 use Sitefrog\View\MenuManager;
+use Sitefrog\View\RepositoryManager;
 use Sitefrog\View\WidgetManager;
 use Sitefrog\Http\RouteManager;
 
@@ -17,7 +18,9 @@ class BaseModule {
         private MenuManager $menuManager,
         private WidgetManager $widgetManager,
         private RouteManager $routeManager,
-        private PermissionManager $permissionManager
+        private RepositoryManager $repositoryManager,
+        private PermissionManager $permissionManager,
+
     )
     {
     }
@@ -68,12 +71,30 @@ class BaseModule {
         $this->menuManager->addItems('admin', $items);
     }
 
-    protected function registerResourcePermissions($group, $labels_prefix = null, $except = [], $override_defaults = [])
+    protected function registerPermission($group, $label, $name, $defaults = [])
+    {
+        $this->permissionManager->register($this->getNamespace(false).'.'.$group, $label, $name, $defaults);
+    }
+
+    protected function registerResourcePermissions($resource, $labels_prefix = null, $except = [], $override_defaults = [])
     {
         if (!$labels_prefix) {
-            $labels_prefix = $this->getNamespace().'::permissions.'.$group;
+            $labels_prefix = $this->getNamespace().'::permissions.'.$resource;
         }
-        $this->permissionManager->registerResource($this->getNamespace(false).'.'.$group, $labels_prefix, $except, $override_defaults);
+        $this->permissionManager->registerResource($this->getNamespace(false).'.'.$resource, $labels_prefix, $except, $override_defaults);
+    }
+
+    protected function registerRepository($resource, $repository)
+    {
+        $this->repositoryManager->register($resource, $repository);
+    }
+
+    protected function registerDefaultRepository($resource, array $params)
+    {
+        if (isset($params['permissions_prefix'])) {
+            $params['permissions_prefix'] = $this->getNamespace(false).'.'.$params['permissions_prefix'];
+        }
+        $this->repositoryManager->registerDefault($resource, $params);
     }
 
 

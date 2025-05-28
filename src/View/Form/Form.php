@@ -35,14 +35,14 @@ class Form
 
     public function onSubmit($fn)
     {
-        if (request()->form() !== $this->name) {
+        $request = request();
+
+        if ($request->form() !== $this->name) {
             return;
         }
 
-        $data = request()->all();
-        foreach ($data as $name => $val) {
-            $this->getFieldByName($name)?->setValue($val);
-        }
+        $data = $request->all();
+        $this->setValues($data);
 
         $validator = Validator::make(
             $data,

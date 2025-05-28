@@ -12,6 +12,7 @@ class DefaultRolesSeeder extends Seeder
     public function run(): void
     {
         $roles = [
+            DefaultRoles::GUEST->value => 'guest',
             DefaultRoles::BLOCKED->value => 'blocked',
             DefaultRoles::USER->value => 'user',
             DefaultRoles::SUPERADMIN->value => 'superadmin'

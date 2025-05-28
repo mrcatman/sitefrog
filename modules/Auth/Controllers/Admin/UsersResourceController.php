@@ -1,16 +1,17 @@
 <?php
 
 namespace Modules\Auth\Controllers\Admin;
+
 use Illuminate\Database\Eloquent\Builder;
+use Modules\Auth\View\Components\Admin\RoleSelect;
 use Sitefrog\Models\User;
+use Sitefrog\Permissions\DefaultRoles;
 use Sitefrog\View\Controllers\AdminResourceController;
 use Sitefrog\View\Form\Fields\FormGroup;
 use Sitefrog\View\Form\Fields\Input;
-use Sitefrog\View\Form\Fields\Select;
 use Sitefrog\View\Form\Form;
 use Sitefrog\View\Table\Column;
 use Sitefrog\View\Table\Table;
-use Spatie\Permission\Models\Role;
 
 class UsersResourceController extends AdminResourceController {
 
@@ -21,14 +22,15 @@ class UsersResourceController extends AdminResourceController {
 
     protected $searchable = ['username', 'email'];
 
-    public function __construct() {
-        parent::__construct();
+    public function initialize() {
+        parent::initialize();
         $this->translations['list']['title'] = __('sitefrog.auth::admin.users.list');
     }
 
+    /* @param User $item */
     protected function buildForm($item = null): Form
     {
-        return new Form(
+        $form = new Form(
             fields: [
                 new FormGroup(
                     label: __('sitefrog.auth::fields.common'),
@@ -36,7 +38,7 @@ class UsersResourceController extends AdminResourceController {
                         new Input(
                             name: 'username',
                             label: __('sitefrog.auth::fields.username'),
-                            rules: ['required', 'min:10']
+                            rules: ['required'] // todo: unique
                         ),
                         new Input(
                             name: 'email',
@@ -46,21 +48,27 @@ class UsersResourceController extends AdminResourceController {
                         ),
                     ]
                 ),
+            ]
+        );
+
+        if (
+            auth()->user()->hasRole(DefaultRoles::SUPERADMIN->value)
+        ) {
+            $form->addField(
                 new FormGroup(
                     label: __('sitefrog.auth::fields.permissions'),
                     fields: [
-                        new Select(
-                            name: 'roles',
-                            options: Role::pluck('name', 'id'),
-                            multiple: true,
-                            label: __('sitefrog.auth::fields.group_id'),
-                            rules: ['required', 'min:10'],
+                        new RoleSelect(
+                            name: 'role_ids',
+                            label: __('sitefrog.auth::fields.roles.label'),
+                            rules: ['required', 'array', 'min:1']
                         ),
                     ]
                 )
+            );
+        }
 
-            ]
-        );
+        return $form;
     }
 
     protected function buildTable(Builder $query): Table

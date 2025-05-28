@@ -12,6 +12,25 @@
         padding: 8px;
         border-radius: 4px;
     }
+    &__label {
+        font-size: 1.0625em;
+        font-weight: 500;
+        margin-bottom: .25em;
+        display: block;
+    }
+
+    &__field-wrapper {
+        &--radio &__inner {
+            display: flex;
+            flex-direction: row-reverse;
+            justify-content: flex-end;
+            align-items: center;
+        }
+    }
+
+    &__field-wrapper--radio &__label {
+        margin-bottom: 0;
+    }
 
     &__cancel {
         margin-left: 16px;
@@ -21,5 +40,19 @@
     }
     &__buttons {
         border-top: 1px solid rgba(255, 255, 255, .2);
+    }
+
+    &__group {
+        &:not(:last-of-type) {
+            margin-bottom: .5em;
+            padding-bottom: 1em;
+            border-bottom: 1px solid #444;
+        }
+        &__label {
+            margin-bottom: .5em;
+            display: block;
+            font-size: 1.125em;
+            font-weight: bold;
+        }
     }
 }

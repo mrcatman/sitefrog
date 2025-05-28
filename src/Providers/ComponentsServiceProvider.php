@@ -23,7 +23,10 @@ use Sitefrog\View\Components\Head;
 use Sitefrog\View\Components\ModalsContainer;
 use Sitefrog\View\Components\Table\Table;
 use Sitefrog\View\Components\WidgetWrapper;
+use Sitefrog\View\Form\Fields\Checkbox;
 use Sitefrog\View\Form\Fields\Input;
+use Sitefrog\View\Form\Fields\Radio;
+use Sitefrog\View\Form\Fields\Select;
 use Sitefrog\View\Widgets\Menu;
 
 class ComponentsServiceProvider extends ServiceProvider {
@@ -52,6 +55,9 @@ class ComponentsServiceProvider extends ServiceProvider {
 
         ComponentManagerFacade::register('form', Form::class);
         ComponentManagerFacade::register('form.input', Input::class);
+        ComponentManagerFacade::register('form.select', Select::class);
+        ComponentManagerFacade::register('form.checkbox', Checkbox::class);
+        ComponentManagerFacade::register('form.radio', Radio::class);
 
         ComponentManagerFacade::register('form.field-wrapper', FieldWrapper::class);
 

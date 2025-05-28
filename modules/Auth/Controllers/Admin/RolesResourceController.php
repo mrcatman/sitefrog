@@ -21,8 +21,8 @@ class RolesResourceController extends AdminResourceController {
 
     protected $searchable = ['name'];
 
-    public function __construct() {
-        parent::__construct();
+    public function initialize() {
+        parent::initialize();
         $this->setTranslations([
             'list' => [
                 'title' => __('sitefrog.auth::admin.roles.list')
@@ -61,10 +61,11 @@ class RolesResourceController extends AdminResourceController {
             foreach ($manager->getAll() as $group) {
                 $fields = [];
                 foreach ($group['permissions'] as $permission) {
+                    $name = 'permissions.'.str_replace('.','-', $permission['full_name']);
                     $fields[] = new Checkbox(
-                        name: $permission['full_name'],
-                        label: __($permission['label']),
-                        value: $item->hasPermissionTo($permission['full_name'])
+                        name: $name,
+                        value: $item->hasPermissionTo($permission['full_name']),
+                        label: __($permission['label'])
                     );
                 }
                 $form->addField(

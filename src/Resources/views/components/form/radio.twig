@@ -1,13 +1,14 @@
 {% set _field = this %}
-{% component 'form.field-wrapper' with { field: _field, type: 'checkbox' } %}
+{% component 'form.field-wrapper' with { field: _field, type: 'radio' } %}
     {% block main %}
         <input
-            type="checkbox"
+            type="radio"
             {{ html_attributes({
                 id: _field.getId(),
                 checked: _field.getValue(),
+                value: _field.getRadioValue() ,
                 name: _field.getName(),
-                class: ['sf-form__checkbox'],
+                class: ['sf-form__radio'],
             }, _field.getAttrs()) }}
          />
     {% endblock %}

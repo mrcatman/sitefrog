@@ -14,6 +14,7 @@ use Sitefrog\View\MenuManager;
 use Sitefrog\View\Page;
 use Sitefrog\View\PageData;
 use Sitefrog\View\RedirectManager;
+use Sitefrog\View\RepositoryManager;
 use Sitefrog\View\Themes\ThemeManager;
 use Sitefrog\View\WidgetManager;
 
@@ -53,6 +54,10 @@ class FacadesServiceProvider extends ServiceProvider {
 
         $this->app->singleton(PermissionManager::class, function () {
             return new PermissionManager();
+        });
+
+        $this->app->singleton(RepositoryManager::class, function () {
+            return new RepositoryManager($this->app);
         });
     }
 

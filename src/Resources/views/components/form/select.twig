@@ -1,5 +1,5 @@
 {% set _field = this %}
-{% component 'form.field-wrapper' with { field: _field } %}
+{% component 'form.field-wrapper' with { field: _field, type: 'select' } %}
     {% block main %}
         <select
             {{ html_attributes({

@@ -15,6 +15,7 @@ class Field extends Component
         protected string $name,
         protected $value = null,
         protected ?string $label = null,
+        protected ?string $description = null,
         protected ?array $attrs = [],
         protected ?array $rules = []
     )
@@ -26,17 +27,37 @@ class Field extends Component
         return 'field_'.$this->name; // todo: add form name?
     }
 
+    public function getName()
+    {
+        $name = $this->name;
+        if (strpos($name, '.') !== false) {
+            $name_parts = explode('.', $name);
+
+            $new_name = '';
+            foreach ($name_parts as $index => $part) {
+                $new_name .= $index > 0 ? '['.$part.']' : $part;
+            }
+            return $new_name;
+        }
+        return $name;
+    }
+
     public function getValidationRules()
     {
+        $rules = $this->rules;
+        if (count($rules) === 0) {
+            $rules = ['sometimes'];
+        }
         return [
-            $this->name => $this->rules
+            $this->name => $rules
         ];
     }
 
     public function setValues(mixed $values)
     {
-        if (isset($values->{$this->getName()})) {
-            $this->value = $values->{$this->getName()};
+        $values = is_array($values) ? $values : $values->toArray();
+        if (isset($values[$this->getName()])) {
+            $this->value = $values[$this->getName()];
         }
     }
 

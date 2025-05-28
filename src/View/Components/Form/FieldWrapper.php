@@ -7,7 +7,10 @@ use Sitefrog\View\Form\Field;
 
 class FieldWrapper extends Component
 {
-    public function __construct(public Field $field) {
+    public function __construct(
+        public Field $field,
+        public ?string $type = null
+    ) {
     }
 
     public static function getTemplate(): string

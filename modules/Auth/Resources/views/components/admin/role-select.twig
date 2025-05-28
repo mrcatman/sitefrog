@@ -1,0 +1,26 @@
+{% set _field = this %}
+{% component 'form.field-wrapper' with { field: _field } %}
+    {% block main %}
+        <div x-data="{ roleIds: {{_field.getRoleIds() | json_encode}}, selectedDefaultRoleId: {{ _field.getSelectedDefaultRoleId() != null ? _field.getSelectedDefaultRoleId() : 0 }} }">
+
+            <template x-if="selectedDefaultRoleId != 0">
+                <input type="hidden" name="{{ _field.getName() }}[]"  x-bind:value="selectedDefaultRoleId" />
+            </template>
+
+            <template x-if="selectedDefaultRoleId == 0">
+                <template x-for="roleId in roleIds">
+                    <input type="hidden" name="{{ _field.getName() }}[]"  x-bind:value="roleId" />
+                </template>
+            </template>
+
+
+            {{ component ('form.radio', { name: 'default_role_id', radioValue: 3, label: trans('sitefrog.auth::fields.roles.user.label'), attrs: {'x-model': 'selectedDefaultRoleId'}} ) }}
+            {{ component ('form.radio', { name: 'default_role_id', radioValue: 255, label: trans('sitefrog.auth::fields.roles.superadmin.label'), description: trans('sitefrog.auth::fields.roles.superadmin.description'), attrs: {'x-model': 'selectedDefaultRoleId'}}) }}
+            {{ component ('form.radio', { name: 'default_role_id', radioValue: 2, label: trans('sitefrog.auth::fields.roles.blocked.label'), description: trans('sitefrog.auth::fields.roles.blocked.description'), attrs: {'x-model': 'selectedDefaultRoleId'}}) }}
+            {{ component ('form.radio', { name: 'default_role_id', radioValue: 0, label: trans('sitefrog.auth::fields.roles.custom.label'), attrs: {'x-model': 'selectedDefaultRoleId'} }) }}
+
+            {{ component ('form.select', { name: 'custom_role_ids', multiple: true, options: _field.getCustomRoleOptions(), attrs: {'x-model': 'roleIds', 'x-show': 'selectedDefaultRoleId == 0'} }) }}
+        </div>
+
+    {% endblock %}
+{% endcomponent %}

@@ -6,11 +6,15 @@ use Modules\Auth\Controllers\Admin\RolesResourceController;
 use Modules\Auth\Controllers\Admin\UsersController;
 use Modules\Auth\Controllers\Admin\UsersResourceController;
 use Modules\Auth\Controllers\AuthController;
+use Modules\Auth\Repositories\RolesRepository;
+use Modules\Auth\Repositories\UsersRepository;
 use Modules\Auth\View\Widgets\AuthBlock;
 use Modules\Auth\View\Widgets\Welcome;
 use Sitefrog\Facades\RouteManager;
+use Sitefrog\Models\User;
 use Sitefrog\Modules\BaseModule;
 use Sitefrog\View\Menu\MenuItem;
+use Spatie\Permission\Models\Role;
 
 class Module extends BaseModule
 {
@@ -71,7 +75,11 @@ class Module extends BaseModule
             )
         ]);
 
-        $this->registerResourcePermissions('users', null, ['create']);
+        $this->registerRepository(User::class, UsersRepository::class);
+        $this->registerRepository(Role::class, RolesRepository::class);
+
+        $this->registerResourcePermissions('users', null, ['create', 'delete']);
+
     }
 
 }
