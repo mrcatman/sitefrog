@@ -4,12 +4,12 @@ namespace Sitefrog\View\Components\Table;
 
 use Sitefrog\View\Component;
 
-use Sitefrog\View\Table\Table as TableClass;
+use Sitefrog\View\Table\Table;
 
-class Table extends Component
+class TableComponent extends Component
 {
     public function __construct(
-        public TableClass $table,
+        public Table $table,
     ) {}
 
     public static function getTemplate(): string

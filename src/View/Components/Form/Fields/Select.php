@@ -1,22 +1,25 @@
 <?php
 
-namespace Sitefrog\View\Form\Fields;
+namespace Sitefrog\View\Components\Form\Fields;
 
 use Illuminate\Support\Collection;
-use Sitefrog\View\Form\Field;
+use Sitefrog\View\Components\Form\Field;
 
-class Radio extends Field
+class Select extends Field
 {
     public function __construct(
         protected string $name,
+        protected array | Collection $options = [],
+        protected ?bool $multiple = false,
         protected $value = null,
-        protected $radioValue = null,
         protected ?array $attrs = [],
         protected ?string $label = null,
         protected ?string $description = null,
         protected ?array $rules = []
     )
     {
+        $this->options = collect($this->options);
+
         parent::__construct(
             name: $name,
             value: $value,
@@ -26,15 +29,9 @@ class Radio extends Field
             rules: $rules
         );
     }
-
-    public function getId()
-    {
-        return parent::getId().'_'.$this->radioValue;
-    }
-
     public static function getTemplate(): string
     {
-        return 'sitefrog::components.form.radio';
+        return 'sitefrog::components.form.select';
     }
 
 }

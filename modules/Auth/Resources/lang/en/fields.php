@@ -8,7 +8,7 @@ return [
     'common' => 'Common',
     'permissions' => 'Permissions',
     'roles' => [
-        'label' => 'Select roles...',
+        'label' => 'Roles',
         'user' => [
             'label' => 'Default user role'
         ],

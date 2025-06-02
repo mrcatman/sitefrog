@@ -4,8 +4,8 @@ namespace Modules\Auth\View\Widgets;
 
 use Illuminate\View\View;
 use Modules\Auth\Helpers\AuthHelper;
+use Sitefrog\View\Components\Form\Fields\Input;
 use Sitefrog\View\Components\WidgetWrapper;
-use Sitefrog\View\Form\Fields\Input;
 use Sitefrog\View\Form\Form;
 use Sitefrog\View\Widget;
 
@@ -21,7 +21,7 @@ class AuthBlock extends Widget
     public function getConfig()
     {
         return new Form(
-            fields: [
+            children: [
                 new Input(
                     name: 'test',
                     label: 'test field',

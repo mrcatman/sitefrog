@@ -5,9 +5,8 @@ namespace Modules\Auth\Helpers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Sitefrog\Facades\FormManager;
-use Sitefrog\Facades\RedirectManager;
 use Sitefrog\Models\User;
-use Sitefrog\View\Form\Fields\Input;
+use Sitefrog\View\Components\Form\Fields\Input;
 use Sitefrog\View\Form\Form;
 
 class AuthHelper

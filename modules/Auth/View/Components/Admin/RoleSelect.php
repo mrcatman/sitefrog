@@ -5,7 +5,7 @@ namespace Modules\Auth\View\Components\Admin;
 use Illuminate\Support\Collection;
 use Sitefrog\Models\User;
 use Sitefrog\Permissions\DefaultRoles;
-use Sitefrog\View\Form\Field;
+use Sitefrog\View\Components\Form\Field;
 use Spatie\Permission\Models\Role;
 
 class RoleSelect extends Field

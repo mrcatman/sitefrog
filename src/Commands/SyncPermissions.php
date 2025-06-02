@@ -34,12 +34,13 @@ class SyncPermissions extends Command
             foreach ($group['permissions'] as $permission) {
                 Permission::findOrCreate($permission['full_name']);
 
+
                 $defaults = $permission['defaults'];
                 if ($defaults === true) {
-                    $defaults = DefaultRoles::cases();
+                    $defaults = DefaultRoles::ids();
                 }
                 foreach ($defaults as $role) {
-                    $roles[$role->value]->givePermissionTo($permission['full_name']);
+                    $roles[$role]->givePermissionTo($permission['full_name']);
                 }
             }
         }

@@ -4,6 +4,7 @@ namespace Modules\Auth;
 use Illuminate\Routing\Router;
 use Modules\Auth\Controllers\Admin\RolesResourceController;
 use Modules\Auth\Controllers\Admin\UsersController;
+use Modules\Auth\Controllers\Admin\UsersCustomFieldsController;
 use Modules\Auth\Controllers\Admin\UsersResourceController;
 use Modules\Auth\Controllers\AuthController;
 use Modules\Auth\Repositories\RolesRepository;
@@ -34,6 +35,8 @@ class Module extends BaseModule
         $this->registerRoutes(function(Router $router) {
             $router->name($this->getRouteName('admin.users.index'))->get('users', [UsersController::class, 'index']);
             $router->name($this->getRouteName('admin.users.settings'))->get('users/settings', [UsersController::class, 'settings']);
+
+            $router->name($this->getRouteName('admin.users.custom-fields'))->any('users/custom-fields', [UsersCustomFieldsController::class, 'index']);
 
             RouteManager::resource(
                 router: $router,
@@ -70,7 +73,11 @@ class Module extends BaseModule
                     new MenuItem(
                         title: __('sitefrog.auth::admin.roles.list'),
                         url: sitefrogRoute('auth', 'admin.users.roles.index')
-                    )
+                    ),
+                    new MenuItem(
+                        title: __('sitefrog.auth::admin.users.custom-fields'),
+                        url: sitefrogRoute('auth', 'admin.users.custom-fields')
+                    ),
                 ]
             )
         ]);

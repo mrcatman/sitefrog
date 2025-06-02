@@ -21,12 +21,9 @@ class Repository {
     public function hasPermissions(string $permission_name, Model $item = null): bool
     {
         $permission = $this->permissions_prefix.'.'.$permission_name;
-        $user = auth()->user(); // todo: guests
-        if (!$user->can($permission)) {
-            return false; // todo: Not authorized page
-        }
 
-        return true;
+        $user = auth()->user(); // todo: guests
+        return $user && $user->can($permission); // todo: Not authorized page
     }
 
     protected function isOwner(Model $item)
@@ -60,9 +57,9 @@ class Repository {
 
     }
 
-    public function get($id)
+    public function getBy(string $column, $value)
     {
-        $item = $this->resource::find($id);
+        $item = $this->resource::where([$column => $value])->first();
         $this->checkPermissions('show', $item);
 
         if (!$item) {
@@ -70,6 +67,11 @@ class Repository {
         }
 
         return $item;
+    }
+
+    public function get($id)
+    {
+        return $this->getBy('id', $id);
     }
 
     public function create(array $data)

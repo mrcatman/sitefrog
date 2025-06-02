@@ -9,7 +9,7 @@ use Sitefrog\Facades\AssetManager;
 use Sitefrog\Facades\FormManager;
 use Sitefrog\Facades\LayoutManager;
 use Sitefrog\Facades\PageData;
-use Sitefrog\View\Components\Form\Form;
+use Sitefrog\View\Components\Form\FormComponent;
 use Sitefrog\View\HTMX;
 
 class BaseController extends Controller
@@ -34,7 +34,7 @@ class BaseController extends Controller
             return redirect(request()->redirectUrl());
         }
 
-        return (new Form(
+        return (new FormComponent(
             form: $form,
         ))->tryRender();
     }
@@ -74,9 +74,16 @@ class BaseController extends Controller
         return view($layout_view, $params);
     }
 
-    protected function renderGrid($layout) {
+    protected function renderGrid(array | string $layout, array $params = []) {
+        if (is_array($layout)) {
+            return $this->render('sitefrog::grid', [
+                'layout' => $layout,
+                'params' => $params
+            ]);
+        }
         return $this->render('sitefrog::grid', [
-            'layout' => $layout
+            'file' => $layout,
+            'params' => $params
         ]);
     }
 

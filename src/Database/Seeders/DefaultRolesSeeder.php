@@ -15,6 +15,7 @@ class DefaultRolesSeeder extends Seeder
             DefaultRoles::GUEST->value => 'guest',
             DefaultRoles::BLOCKED->value => 'blocked',
             DefaultRoles::USER->value => 'user',
+            DefaultRoles::UNCONFIRMED->value => 'unconfirmed',
             DefaultRoles::SUPERADMIN->value => 'superadmin'
         ];
         foreach ($roles as $role_id => $role_name) {

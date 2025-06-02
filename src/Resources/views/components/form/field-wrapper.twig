@@ -12,11 +12,11 @@
     {% if this.field.hasErrors() %}
     <div class="sf-form__errors">
         {% for error in this.field.getErrors() %}
-        <span class="sf-form__error">{{error}}</span>
+        <div class="sf-form__error">{{error}}</div>
        {% endfor  %}
     </div>
     {% endif %}
     {% if this.field.getDescription() is not null %}
-        <div class="sf-form__field__description">{{this.field.getDescription()}}</div>
+        <div class="sf-form__description">{{this.field.getDescription()}}</div>
     {% endif %}
 </div>

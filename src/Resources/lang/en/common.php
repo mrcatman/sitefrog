@@ -1,5 +1,6 @@
 <?php
 return [
+    'search' => 'Search',
     'actions' => 'Actions',
     'edit' => 'Edit',
     'cancel' => 'Cancel',

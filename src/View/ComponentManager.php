@@ -41,9 +41,14 @@ class ComponentManager
                 if ($param->isDefaultValueAvailable()) {
                     $constructorArgs[$param->getName()] = $param->getDefaultValue();
                 } else {
-                    $constructorArgs[$param->getName()] = app()->make($param->getType()->getName());
+                    if (!$param->isOptional() && !$param->allowsNull()) {
+                        $type = $param->getType();
+                        if (!$type instanceof \ReflectionUnionType && $type->isBuiltin()) {
+                            throw new \Exception("Param '" . $param->getName() . "' not found for component $name");
+                        }
+                        $constructorArgs[$param->getName()] = app()->make($param->getType()->getName());
+                    }
                 }
-
             }
         }
         return $reflection->newInstanceArgs($constructorArgs);

@@ -11,13 +11,14 @@ use Sitefrog\Repositories\Repository;
 use Sitefrog\View\Components\Admin\FiltersWrapper;
 use Sitefrog\View\Components\Box;
 use Sitefrog\View\Components\Button;
-use Sitefrog\View\Form\Fields\Input;
+use Sitefrog\View\Components\Form\Fields\Input;
+use Sitefrog\View\Components\Form\FormComponent as FormComponent;
+use Sitefrog\View\Components\Table\TableComponent;
 use Sitefrog\View\Form\Form;
 use Sitefrog\View\HTMX;
 use Sitefrog\View\RepositoryManager;
 use Sitefrog\View\Table\Column;
 use Sitefrog\View\Table\Table;
-use Sitefrog\View\Components\Form\Form as FormComponent;
 
 class AdminResourceController extends BaseController
 {
@@ -227,7 +228,7 @@ class AdminResourceController extends BaseController
                                         'placeholder' => __('sitefrog::common.search'),
                                     ]
                                 ),
-                                new \Sitefrog\View\Components\Table\Table(
+                                new TableComponent(
                                     table: $table
                                 )
                             ]

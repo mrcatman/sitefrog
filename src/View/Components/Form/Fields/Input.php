@@ -1,8 +1,8 @@
 <?php
 
-namespace Sitefrog\View\Form\Fields;
+namespace Sitefrog\View\Components\Form\Fields;
 
-use Sitefrog\View\Form\Field;
+use Sitefrog\View\Components\Form\Field;
 
 class Input extends Field
 {

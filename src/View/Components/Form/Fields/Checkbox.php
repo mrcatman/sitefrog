@@ -1,9 +1,8 @@
 <?php
 
-namespace Sitefrog\View\Form\Fields;
+namespace Sitefrog\View\Components\Form\Fields;
 
-use Illuminate\Support\Collection;
-use Sitefrog\View\Form\Field;
+use Sitefrog\View\Components\Form\Field;
 
 class Checkbox extends Field
 {

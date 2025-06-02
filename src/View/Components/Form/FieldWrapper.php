@@ -3,7 +3,6 @@
 namespace Sitefrog\View\Components\Form;
 
 use Sitefrog\View\Component;
-use Sitefrog\View\Form\Field;
 
 class FieldWrapper extends Component
 {

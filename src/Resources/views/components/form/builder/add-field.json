@@ -1,0 +1,25 @@
+{
+    "version": "0.0.1",
+    "layout": [
+        {
+            "component": "grid.row",
+            "children": [
+                {
+                    "component": "form",
+                    "params": {
+                        "name": "builder_select_type_form"
+                    },
+                    "fields": [
+                        {
+                            "component": "form.select",
+                            "params": {
+                                "name": "type",
+                                "options": "$$fieldBuilders"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

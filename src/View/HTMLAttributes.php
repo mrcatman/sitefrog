@@ -9,7 +9,7 @@ class HTMLAttributes
     ];
 
     private static $bool = [
-        'checked'
+        'checked', 'multiple'
     ];
 
     public static function process($attrs)

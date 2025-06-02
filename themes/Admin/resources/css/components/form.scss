@@ -20,6 +20,9 @@
     }
 
     &__field-wrapper {
+        &--radio {
+            margin-bottom: .5em;
+        }
         &--radio &__inner {
             display: flex;
             flex-direction: row-reverse;
@@ -29,8 +32,22 @@
     }
 
     &__field-wrapper--radio &__label {
+        margin-left: .25em;
         margin-bottom: 0;
     }
+
+    &__error {
+        margin-top: .25em;
+        color: #e53b3b;
+    }
+
+    &__description {
+        margin-top: .25em;
+        opacity: .75;
+        font-style: italic;
+    }
+
+
 
     &__cancel {
         margin-left: 16px;

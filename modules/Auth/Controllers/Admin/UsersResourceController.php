@@ -6,9 +6,9 @@ use Illuminate\Database\Eloquent\Builder;
 use Modules\Auth\View\Components\Admin\RoleSelect;
 use Sitefrog\Models\User;
 use Sitefrog\Permissions\DefaultRoles;
+use Sitefrog\View\Components\Form\Fields\FormGroup;
+use Sitefrog\View\Components\Form\Fields\Input;
 use Sitefrog\View\Controllers\AdminResourceController;
-use Sitefrog\View\Form\Fields\FormGroup;
-use Sitefrog\View\Form\Fields\Input;
 use Sitefrog\View\Form\Form;
 use Sitefrog\View\Table\Column;
 use Sitefrog\View\Table\Table;
@@ -90,6 +90,10 @@ class UsersResourceController extends AdminResourceController {
                     name: 'email',
                     label: __('sitefrog.auth::fields.email'),
                     sortable: true,
+                ),
+                new Column(
+                    name: 'role_names',
+                    label: __('sitefrog.auth::fields.roles.label'),
                 ),
                 new Column(
                     name: 'created_at',

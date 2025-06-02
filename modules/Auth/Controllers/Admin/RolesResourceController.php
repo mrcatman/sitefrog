@@ -3,10 +3,10 @@
 namespace Modules\Auth\Controllers\Admin;
 use Illuminate\Database\Eloquent\Builder;
 use Sitefrog\Permissions\PermissionManager;
+use Sitefrog\View\Components\Form\Fields\Checkbox;
+use Sitefrog\View\Components\Form\Fields\FormGroup;
+use Sitefrog\View\Components\Form\Fields\Input;
 use Sitefrog\View\Controllers\AdminResourceController;
-use Sitefrog\View\Form\Fields\Checkbox;
-use Sitefrog\View\Form\Fields\FormGroup;
-use Sitefrog\View\Form\Fields\Input;
 use Sitefrog\View\Form\Form;
 use Sitefrog\View\Table\Column;
 use Sitefrog\View\Table\Table;

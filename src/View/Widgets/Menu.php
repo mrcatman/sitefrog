@@ -3,10 +3,10 @@
 namespace Sitefrog\View\Widgets;
 
 use Illuminate\View\View;
-use Sitefrog\View\MenuManager;
-use Sitefrog\View\Form\Fields\Input;
+use Sitefrog\View\Components\Form\Fields\Input;
 use Sitefrog\View\Form\Form;
 use Sitefrog\View\Menu\Menu as MenuInstance;
+use Sitefrog\View\MenuManager;
 use Sitefrog\View\Widget;
 
 class Menu extends Widget

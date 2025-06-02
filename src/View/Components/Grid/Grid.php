@@ -8,10 +8,12 @@ use Sitefrog\Facades\ComponentManager;
 
 class Grid extends Component
 {
+    const SUBSTITUTE_PARAM_PREFIX = '$$';
 
     public function __construct(
         private ?string $file = null,
         public array | Collection | null $layout = null,
+        public array | Collection | null $params = null,
     )
     {
         if ($layout) {
@@ -19,24 +21,56 @@ class Grid extends Component
         }
     }
 
+    private function findViewFile()
+    {
+        if (!file_exists($this->file)) {
+            $finder = app('view')->getFinder();
+            return $finder->find($this->file);
+        }
+        return $this->file;
+    }
+
+    private function substituteParams(&$params)
+    {
+        foreach ($params as $key => $value) {
+
+            if (str_starts_with($value, self::SUBSTITUTE_PARAM_PREFIX)) {
+                $param = ltrim($value, self::SUBSTITUTE_PARAM_PREFIX);
+                if (!isset($this->params[$param])) { // todo: handle multidimensional
+                    throw new \Exception("Param $param not found for $this->file");
+                }
+                $params[$key] = $this->params[$param];
+            }
+
+            if (is_array($value)) {
+                $this->substituteParams($value);
+            }
+        }
+    }
+
     private function configToComponent($config)
     {
-        $children = collect(!empty($config->children) ? $config->children : [])->map(function ($childConfig) {
-            return $this->configToComponent($childConfig);
-        });
-
         $params = !empty($config->params) ? (array)$config->params : [];
-        $params['children'] = $children;
+
+        $childrenPaths = ['children', 'fields']; // todo: rewrite
+        foreach ($childrenPaths as $path) {
+            if (isset($config->$path)) {
+                $children = collect(!empty($config->$path) ? $config->$path : [])->map(function ($childConfig) {
+                    return $this->configToComponent($childConfig);
+                });
+                $params[$path] = $children;
+            }
+        }
+
+        $this->substituteParams($params);
 
         return ComponentManager::makeInstance($config->component, $params);
     }
 
     public function loadFromFile()
     {
-        if (!file_exists($this->file)) {
-            throw new \Exception('Grid file not found: '.$this->file);
-        }
-        $grid = json_decode(file_get_contents($this->file)); // todo: check version, validate, etc
+        $file = $this->findViewFile();
+        $grid = json_decode(file_get_contents($file)); // todo: check version, validate, etc
         $layout = collect($grid->layout)->map(function($config) {
             return $this->configToComponent($config);
         });

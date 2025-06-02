@@ -5,6 +5,7 @@ namespace Sitefrog\View\Form;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Validator;
 use Sitefrog\Traits\MagicGetSet;
+use Sitefrog\View\Components\Form\Field;
 
 class Form
 {

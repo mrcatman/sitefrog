@@ -14,23 +14,23 @@ class ResourcePermissions
         ],
         [
             'name' => 'create',
-            'defaults' => [DefaultRoles::USER, DefaultRoles::SUPERADMIN],
+            'defaults' => [DefaultRoles::USER->value, DefaultRoles::SUPERADMIN->value],
         ],
         [
             'name' => 'edit',
-            'defaults' => [DefaultRoles::USER, DefaultRoles::SUPERADMIN],
+            'defaults' => [DefaultRoles::USER->value, DefaultRoles::SUPERADMIN->value],
         ],
         [
             'name' => 'edit_all',
-            'defaults' => [DefaultRoles::SUPERADMIN],
+            'defaults' => [DefaultRoles::SUPERADMIN->value],
         ],
         [
             'name' => 'delete',
-            'defaults' => [DefaultRoles::USER, DefaultRoles::SUPERADMIN],
+            'defaults' => [DefaultRoles::USER->value, DefaultRoles::SUPERADMIN->value],
         ],
         [
             'name' => 'delete_all',
-            'defaults' => [DefaultRoles::SUPERADMIN],
+            'defaults' => [DefaultRoles::SUPERADMIN->value],
         ]
     ];
 

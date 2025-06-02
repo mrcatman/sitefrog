@@ -5,7 +5,9 @@ enum DefaultRoles: int
 {
     case GUEST = 1;
     case BLOCKED = 2;
-    case USER = 3;
+
+    case UNCONFIRMED = 3;
+    case USER = 4;
     case SUPERADMIN = 255;
 
     public static function ids()

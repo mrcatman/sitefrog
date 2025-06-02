@@ -3,6 +3,7 @@
 namespace Sitefrog\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use Illuminate\View\FileViewFinder;
 use Sitefrog\Context;
 use Sitefrog\Http\RouteManager;
 use Sitefrog\Permissions\PermissionManager;

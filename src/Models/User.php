@@ -22,4 +22,9 @@ class User extends Authenticatable
         'password',
     ];
 
+    public function getRoleNamesAttribute()
+    {
+        return $this->roles->pluck('name')->join(', ');
+    }
+
 }
