@@ -11,6 +11,6 @@ class GridEngine implements Engine
         return (new Grid(
             file: $file,
             params: $params
-        ))->render();
+        ))->render()->toHtml();
     }
 }

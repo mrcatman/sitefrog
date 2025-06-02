@@ -14,6 +14,14 @@
     &__row > &__children {
         flex-direction: row;
     }
+    &__row--form > &__children {
+        align-items: flex-end;
+
+        & > .sf-form__field-wrapper {
+            flex: 1;
+        }
+    }
+
     &__content {
         flex: 1;
     }

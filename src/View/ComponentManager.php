@@ -44,6 +44,7 @@ class ComponentManager
                     if (!$param->isOptional() && !$param->allowsNull()) {
                         $type = $param->getType();
                         if (!$type instanceof \ReflectionUnionType && $type->isBuiltin()) {
+
                             throw new \Exception("Param '" . $param->getName() . "' not found for component $name");
                         }
                         $constructorArgs[$param->getName()] = app()->make($param->getType()->getName());

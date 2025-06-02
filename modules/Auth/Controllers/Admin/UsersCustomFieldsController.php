@@ -10,7 +10,6 @@ class UsersCustomFieldsController extends BaseController {
 
     public function index()
     {
-
         return $this->renderGrid([
             new Box(
                 heading: Page::getTitle(),

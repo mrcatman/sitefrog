@@ -52,4 +52,9 @@ class FormGroup extends Field
         return 'sitefrog::components.form.group';
     }
 
+    public function getChildren(): array|Collection|null
+    {
+        return $this->fields;
+    }
+
 }

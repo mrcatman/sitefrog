@@ -7,15 +7,39 @@
                 {
                     "component": "form",
                     "params": {
-                        "name": "builder_select_type_form"
+                        "name": "form_builder_add_field",
+                        "config": {
+                            "show_submit": false
+                        }
                     },
                     "fields": [
                         {
-                            "component": "form.select",
+                            "component": "grid.row",
                             "params": {
-                                "name": "type",
-                                "options": "$$fieldBuilders"
-                            }
+                                "variant": "form"
+                            },
+                            "children": [
+                                {
+                                    "component": "form.select",
+                                    "params": {
+                                        "label": "__test",
+                                        "name": "type",
+                                        "options": "$$this.fieldBuilders",
+                                        "rules": ["min:1000"]
+                                    }
+                                },
+                                {
+                                    "component": "button",
+                                    "params": {
+                                        "name": "type",
+                                        "content": "__test2",
+                                        "attrs": {
+
+                                            "type": "submit"
+                                        }
+                                    }
+                                }
+                            ]
                         }
                     ]
                 }

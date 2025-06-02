@@ -9,14 +9,18 @@ use Illuminate\View\View;
 class Row extends Component
 {
     public function __construct(
-        private array | Collection $children = []
+        protected array | Collection $children = [],
+        protected ?string $variant = null,
     ) {}
 
-
-    public function render(): View
+    public static function getTemplate(): string
     {
-        return view('sitefrog::components.grid.row', [
-            'children' => $this->children
-        ]);
+        return 'sitefrog::components.grid.row';
     }
+
+    public function getChildren(): array | Collection | null
+    {
+        return $this->children;
+    }
+
 }

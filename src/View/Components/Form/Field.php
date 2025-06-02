@@ -2,14 +2,11 @@
 
 namespace Sitefrog\View\Components\Form;
 
-use Sitefrog\Traits\MagicGetSet;
 use Sitefrog\View\Component;
 
 class Field extends Component
 {
-    use MagicGetSet;
-
-    private array $errors = [];
+    protected array $errors = [];
 
     public function __construct(
         protected string $name,
@@ -56,9 +53,9 @@ class Field extends Component
     public function setValues(mixed $values)
     {
         $values = is_array($values) ? $values : $values->toArray();
-       // if (isset($values[$this->getName()])) {
+        if (isset($values[$this->getName()])) {
             $this->value = $values[$this->getName()] ?? '';
-       // }
+        }
     }
 
     public function setErrors(mixed $errors)

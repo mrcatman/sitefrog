@@ -16,4 +16,10 @@ class Box extends Component
     {
         return 'sitefrog::components.box';
     }
+
+    public function getChildren(): array|Collection|null
+    {
+        return array_merge(...array_values($this->children));
+    }
+
 }

@@ -9,6 +9,7 @@ use Sitefrog\Facades\ComponentManager;
 class Grid extends Component
 {
     const SUBSTITUTE_PARAM_PREFIX = '$$';
+    const SUBSTITUTE_TRANSLATION_PREFIX = '__';
 
     public function __construct(
         private ?string $file = null,
@@ -16,7 +17,11 @@ class Grid extends Component
         public array | Collection | null $params = null,
     )
     {
-        if ($layout) {
+        if (!empty($this->file)) {
+            $this->loadFromFile();
+        } else if (empty($this->layout)) {
+            throw new \Exception('Specify either layout or file for grid');
+        } else {
             $this->layout = collect($layout);
         }
     }
@@ -33,29 +38,43 @@ class Grid extends Component
     private function substituteParams(&$params)
     {
         foreach ($params as $key => $value) {
-
-            if (str_starts_with($value, self::SUBSTITUTE_PARAM_PREFIX)) {
-                $param = ltrim($value, self::SUBSTITUTE_PARAM_PREFIX);
-                if (!isset($this->params[$param])) { // todo: handle multidimensional
-                    throw new \Exception("Param $param not found for $this->file");
-                }
-                $params[$key] = $this->params[$param];
-            }
-
             if (is_array($value)) {
                 $this->substituteParams($value);
+            } else {
+                if (str_starts_with($value, self::SUBSTITUTE_PARAM_PREFIX)) {
+                    $paramName = ltrim($value, self::SUBSTITUTE_PARAM_PREFIX);
+                    $params[$key] = $this->getParamValue($paramName);
+                }
+
+                if (str_starts_with($value, self::SUBSTITUTE_TRANSLATION_PREFIX)) {
+                    $translationKey = ltrim($value, self::SUBSTITUTE_TRANSLATION_PREFIX);
+                    $params[$key] = __($translationKey);
+                }
             }
         }
     }
 
+    private function getParamValue(string $paramName)
+    {
+        $paramPath = explode('.', $paramName);
+        $paramValue = $this->params;
+        foreach ($paramPath as $paramPathFragment) {
+            if ((is_array($paramValue) && !isset($paramValue[$paramPathFragment])) || (!is_array($paramValue) && !isset($paramValue->$paramPathFragment))) {
+                throw new \Exception("Param $paramName not found for grid template $this->file");
+            }
+            $paramValue = is_array($paramValue) ? $paramValue[$paramPathFragment] : $paramValue->$paramPathFragment;
+        }
+        return $paramValue;
+    }
+
     private function configToComponent($config)
     {
-        $params = !empty($config->params) ? (array)$config->params : [];
+        $params = !empty($config['params']) ? $config['params'] : [];
 
         $childrenPaths = ['children', 'fields']; // todo: rewrite
         foreach ($childrenPaths as $path) {
-            if (isset($config->$path)) {
-                $children = collect(!empty($config->$path) ? $config->$path : [])->map(function ($childConfig) {
+            if (isset($config[$path])) {
+                $children = collect(!empty($config[$path]) ? $config[$path] : [])->map(function ($childConfig) {
                     return $this->configToComponent($childConfig);
                 });
                 $params[$path] = $children;
@@ -63,15 +82,14 @@ class Grid extends Component
         }
 
         $this->substituteParams($params);
-
-        return ComponentManager::makeInstance($config->component, $params);
+        return ComponentManager::makeInstance($config['component'], $params);
     }
 
     public function loadFromFile()
     {
         $file = $this->findViewFile();
-        $grid = json_decode(file_get_contents($file)); // todo: check version, validate, etc
-        $layout = collect($grid->layout)->map(function($config) {
+        $grid = json_decode(file_get_contents($file), 1); // todo: check version, validate, etc
+        $layout = collect($grid['layout'])->map(function($config) {
             return $this->configToComponent($config);
         });
 
@@ -83,12 +101,8 @@ class Grid extends Component
         return 'sitefrog::components.grid';
     }
 
-    public function beforeRender(): void
+    public function getChildren(): array|Collection|null
     {
-        if (!empty($this->file)) {
-            $this->loadFromFile();
-        } else if (empty($this->layout)) {
-            throw new \Exception('Specify either layout or file for grid');
-        }
+        return $this->layout;
     }
 }

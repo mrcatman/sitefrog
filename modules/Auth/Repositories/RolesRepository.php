@@ -31,7 +31,7 @@ class RolesRepository extends Repository {
     protected function afterSave(Model $item, array $data) {
         if (isset($data['permissions'])) {
             $permissions = array_map(function ($permission) {
-                return str_replace('-', '.', $permission);
+                return str_replace('--', '.', $permission);
             }, array_keys($data['permissions']));
             $item->syncPermissions($permissions);
         }

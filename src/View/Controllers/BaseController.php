@@ -6,10 +6,9 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Sitefrog\Facades\AssetManager;
-use Sitefrog\Facades\FormManager;
 use Sitefrog\Facades\LayoutManager;
 use Sitefrog\Facades\PageData;
-use Sitefrog\View\Components\Form\FormComponent;
+use Sitefrog\View\Components\Grid\Grid;
 use Sitefrog\View\HTMX;
 
 class BaseController extends Controller
@@ -24,26 +23,8 @@ class BaseController extends Controller
 
     protected function initialize() {}
 
-    protected function handleHtmxFormRequest()
-    {
-        $form = FormManager::get(request()->form());
-        if (!$form) {
-            throw new \Exception("Form not found: ".request()->form());
-        }
-        if (request()->redirectUrl()) {
-            return redirect(request()->redirectUrl());
-        }
-
-        return (new FormComponent(
-            form: $form,
-        ))->tryRender();
-    }
-
     protected function render(string $view, array $view_params = [])
     {
-        if (HTMX::isFormRequest()) {
-            return $this->handleHtmxFormRequest();
-        }
 
         if (request()->redirectUrl()) {
             return redirect(request()->redirectUrl());
@@ -70,20 +51,23 @@ class BaseController extends Controller
             $params['__sf_grid_file'] = $layout_view;
             $layout_view = 'sitefrog::layouts.grid';
         }
-
         return view($layout_view, $params);
     }
 
     protected function renderGrid(array | string $layout, array $params = []) {
         if (is_array($layout)) {
-            return $this->render('sitefrog::grid', [
-                'layout' => $layout,
-                'params' => $params
-            ]);
+            $grid = new Grid(
+                layout: $layout,
+                params: $params
+            );
+        } else {
+            $grid = new Grid(
+                file: $layout,
+                params: $params
+            );
         }
-        return $this->render('sitefrog::grid', [
-            'file' => $layout,
-            'params' => $params
+        return $this->render('sitefrog::component', [
+            'component' => $grid,
         ]);
     }
 

@@ -1,16 +1,27 @@
 <?php
 namespace Sitefrog\View;
 
+use Illuminate\Support\Collection;
 use Illuminate\View\View;
+use Sitefrog\Exceptions\OverwriteResponseException;
+use Sitefrog\Traits\MagicGetSet;
 use Sitefrog\View\Components\Error;
 
 class Component
 {
+    use MagicGetSet;
+
     public static function getTemplate(): string {
         throw new \Exception('Template not set');
     }
 
     public function beforeRender(): void {}
+
+
+    public function getChildren(): array | Collection | null
+    {
+        return null;
+    }
 
     public function render(): View | string
     {
@@ -24,7 +35,10 @@ class Component
     {
         try {
             return $this->render();
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
+            if ($e instanceof OverwriteResponseException) {
+                throw $e;
+            }
             $errorComponent = new Error(exception: $e);
             return $errorComponent->render();
         }

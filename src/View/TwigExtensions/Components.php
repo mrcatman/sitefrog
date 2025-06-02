@@ -22,9 +22,10 @@ class Components extends AbstractExtension
         try {
             $component = ComponentManager::makeInstance($name, $data);
             return $component->render();
-        } catch (\Exception $e) {
-            $errorComponent = new Error(exception: $e);
-            return $errorComponent->render();
+        } catch (\Throwable $e) {
+            return 'test';
+         //   $errorComponent = new Error(exception: $e);
+         //   return $errorComponent->render();
         }
     }
 

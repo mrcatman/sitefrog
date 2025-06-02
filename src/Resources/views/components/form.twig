@@ -14,15 +14,16 @@
         {{ component('grid', { layout: this.form.getFields() }) }}
     </div>
 
-
+    {% apply spaceless %}
     <div class="sf-form__buttons">
+        {% if this.form.getConfig().show_submit %}
         {{ component('button', {content: this.form.getSubmitLabel() ?: trans('sitefrog::common.submit'), attrs: {type: 'submit'}}) }}
+        {% endif %}
         {% if is_modal_request() %}
         <a class="sf-form__cancel" data-modal-close>{{ trans('sitefrog::common.cancel') }}</a>
         {% endif %}
     </div>
-
-
+    {% endapply %}
 
     {% if not is_form_request() %}
 </form>

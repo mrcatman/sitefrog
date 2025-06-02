@@ -13,7 +13,8 @@
         "scssphp/scssphp": "^2.0",
         "spatie/laravel-permission": "^6.17",
         "twig/html-extra": "^3.20",
-        "wikimedia/minify": "^2.8"
+        "wikimedia/minify": "^2.8",
+        "ext-http": "*"
     },
     "require-dev": {
         "barryvdh/laravel-ide-helper": "^3.5",

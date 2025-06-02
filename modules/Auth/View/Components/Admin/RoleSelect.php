@@ -38,8 +38,8 @@ class RoleSelect extends Field
     /** @var User $user */
     public function setValues(mixed $user)
     {
-        if (isset($user['default_role_id'])) {
-            $this->selectedDefaultRoleId = $user['default_role_id'];
+        if (isset($user['default_role_id']) || isset($user['role_ids'])) {
+            $this->selectedDefaultRoleId = isset($user['default_role_id']) ? $user['default_role_id'] : DefaultRoles::USER->value;
             $this->roleIds = isset($user['role_ids']) ? $user['role_ids'] : [];
             return;
         }

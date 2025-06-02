@@ -61,7 +61,7 @@ class RolesResourceController extends AdminResourceController {
             foreach ($manager->getAll() as $group) {
                 $fields = [];
                 foreach ($group['permissions'] as $permission) {
-                    $name = 'permissions.'.str_replace('.','-', $permission['full_name']);
+                    $name = 'permissions.'.str_replace('.','--', $permission['full_name']);
                     $fields[] = new Checkbox(
                         name: $name,
                         value: $item->hasPermissionTo($permission['full_name']),
